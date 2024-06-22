@@ -1,0 +1,165 @@
+// user read data 
+// {
+//     "id": 5,
+//     "profile_img": null,
+//     "cv_file": null,
+//     "date_joined": "2024-06-21T19:35:02.648767Z",
+//     "last_login": null,
+//     "first_name": "Client",
+//     "last_name": "Profile",
+//     "email": "client@gmail.com",
+//     "phone": "0332140079",
+//     "location": "186/3611 Tanambao",
+//     "isClient": true,
+    // "region": {
+    //     "id": 2,
+    //     "designation": "Fianarantsoa"
+    // },
+//     "groups": [],
+//     "user_permissions": []
+// }
+
+
+// Lawyer read data
+// {
+//     "id": 4,
+//     "profile_img": null,
+//     "cv_file": null,
+//     "date_joined": "2024-06-21T14:26:26.219490Z",
+//     "region": {
+//         "id": 2,
+//         "designation": "Fianarantsoa"
+//     },
+//     "domains": [
+//         {
+//             "id": 4,
+//             "name": "Droit du travail"
+//         },
+//         {
+//             "id": 5,
+//             "name": "Droit pénal"
+//         }
+//     ],
+//     "last_login": null,
+//     "first_name": "Advocado",
+//     "last_name": "Judge",
+//     "email": "rakoto@gmail.com",
+//     "phone": "0332140079",
+//     "location": "186/3611 Tanambao",
+//     "isClient": false,
+//     "availability": null,
+//     "groups": [],
+//     "user_permissions": []
+// }
+
+
+// Speciality data format
+// {
+//     "id": 0,
+//     "name": "string",
+//     "domain": 0
+//     }
+    
+
+// Notification data format
+// {
+//     "id": 8,
+//     "receiver": {
+//         "first_name": "Advocado",
+//         "last_name": "Judge",
+//         "profile_img": null
+//     },
+//     "appointment": {
+//         "id": 3,
+//         "speciality": {
+//             "id": 10,
+//             "name": "Licenciement",
+//             "domain": 4
+//         },
+//         "client": {
+//             "first_name": "Client",
+//             "last_name": "Profile",
+//             "profile_img": null
+//         },
+//         "title": "Demande d'aide urgent",
+//         "description": "J'aimerai soliciter de vos services pour m'aider dans un afaire delicat. Mes sincere salutation. En attente d'un retour favorable de votre part.",
+//         "message": "J'accepte de vous recevoir bientot",
+//         "date": "2019-08-24T14:15:22Z",
+//         "created_at": "2024-06-21T21:36:25.321852Z"
+//     },
+//     "author": 5,
+//     "type": "annulation",
+//     "seen": false,
+//     "created_at": "2024-06-21T23:02:14.987106Z"
+// },
+
+// Avis format 
+// {
+//     "id": 1,
+//     "lawyer": {
+//         "id": 4,
+//         "first_name": "Advocado",
+//         "last_name": "Judge",
+//         "profile_img": null
+//     },
+//     "writer": 5,
+//     "text": "Travail apprecie, je recommande ! :)",
+//     "preference": 5,
+//     "date": "2024-06-21T20:00:51.908063Z"
+// },
+
+
+
+// experience data format
+// {
+//     "id": 1,
+//     "domain": {
+//         "id": 6,
+//         "name": "Droit immobilier"
+//     },
+//     "specialities": [
+//         {
+//             "id": 21,
+//             "name": "Droit de la construction",
+//             "domain": 6
+//         }
+//     ],
+//     "title": "Assistance a la creation du batiment de l'entreprise YYY",
+//     "description": "Mise en place des document et procedure juridique pour l'accomplissement de la construction du batiment locaux de l'etreprise YYY",
+//     "date_beg": "2019-08-24",
+//     "date_end": "2019-08-24",
+//     "created_at": "2024-06-21T20:29:48.561913Z",
+//     "owner": 5
+// },
+
+
+// Appointment Interface
+// {
+//     "id": 3,
+//     "speciality": {
+//         "id": 10,
+//         "name": "Licenciement",
+//         "domain": 4
+//     },
+//     "lawyer": {
+            // id : nmber
+//         "first_name": "Advocado",
+//         "last_name": "Judge",
+//         "profile_img": null
+//     },
+//     "client": {
+//         "first_name": "Client",
+//         "last_name": "Profile",
+//         "profile_img": null
+//     },
+//     "title": "Demande d'aide urgent",
+//     "description": "J'aimerai soliciter de vos services pour m'aider dans un afaire delicat. Mes sincere salutation. En attente d'un retour favorable de votre part.",
+//     "message": "J'accepte de vous recevoir bientot",
+//     "date": "2019-08-24T14:15:22Z",
+//     "isConfirmed": true,
+//     "isArchived": false,
+//     "isValid": true,
+//     "client_id": 5,
+//     "created_at": "2024-06-21T21:36:25.321852Z"
+// }
+

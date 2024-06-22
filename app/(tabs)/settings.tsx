@@ -10,10 +10,10 @@ export default function DetailScreen() {
                 color:"#f84aff"
             }}
             >Inside detailed function</Text>
-            Tab [Home|Settings]
-            <Link href="/detail">
-                Go to detail
-            </Link> */}
+            Tab [Home|Settings] */}
+            <Link href="/">
+                Go to home
+            </Link>
         </View>
     )
 }
