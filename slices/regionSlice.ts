@@ -2,16 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { Region } from "@/types/modelsType";
 
 const initialState: {regions: Region[]} = {
-    regions: [
-        {
-            id: 1,
-            designation: "Antananarivo"
-        },
-        {
-            id:2,
-            designation: "Mahaja"
-        }
-    ]
+    regions: []
 }
 
 const regionSlice = createSlice({
@@ -19,7 +10,7 @@ const regionSlice = createSlice({
     initialState,
     reducers: {
         setRegion: (state, action: PayloadAction<Region[]>) => {
-            state.regions = action.payload;
+            state.regions = action.payload
         },
 
         addRegion: (state, action: PayloadAction<Region>) => {

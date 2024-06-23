@@ -9,7 +9,7 @@ export default function TabLayout() {
         name="settings" 
         options={{
           title:"Settings",
-          tabBarIcon: ({color}) => <FontAwesome size={28} name='home' color={color}/>,
+          tabBarIcon: ({color}) => <FontAwesome size={28} name='user-circle' color={color}/>,
           // href:"/"
       }}/>
       <Tabs.Screen 

@@ -25,6 +25,7 @@ export const tokenManagement: TokenManagement = {
 
     setJwt: async (token) => {
         try {
+            await AsyncStorage.removeItem("token")
             await AsyncStorage.setItem("token", token)
             return true
         } catch (error) {
@@ -44,6 +45,7 @@ export const tokenManagement: TokenManagement = {
 
     setRefresh: async (refresh) => {
         try {
+            await AsyncStorage.removeItem("refresh")
             await AsyncStorage.setItem("refresh", refresh)
             return true
         } catch (error) {

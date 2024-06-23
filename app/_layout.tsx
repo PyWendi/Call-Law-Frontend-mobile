@@ -8,9 +8,8 @@ import 'react-native-reanimated';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '@/stores/store';
-import { Button, Provider as AntProvider, Toast } from '@ant-design/react-native';
+import { Provider as AntProvider } from '@ant-design/react-native';
 
-// import { useColorScheme } from '@/hooks/useColorScheme';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

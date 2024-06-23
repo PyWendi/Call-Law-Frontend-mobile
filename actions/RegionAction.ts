@@ -14,11 +14,17 @@ export const getRegion = async ():Promise<RegionData> => {
         let response = await api.get("region/")
         if (response.status === 200){
             console.log(response.data, "Inside region action fetching event****")
+            return {
+                regions: response.data.results,
+                res: true
+            }
         }
+
         return {
-            regions: response.data.results,
-            res: true
+            regions: [],
+            res: false
         }
+
     } catch (error) {
         console.log(error)
         return {

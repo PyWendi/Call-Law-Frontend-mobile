@@ -57,6 +57,18 @@ export interface Lawyer {
     availability?: string | null;
 }
 
+
+export interface LawyerUpdate {
+    region: number;
+    domains: number[];
+    first_name: string;
+    last_name: string;
+    email: string;
+    phone: string;
+    location: string;
+    availability?: string | null;
+}
+
 export interface NotificationReciever {
     id: number;
     first_name: string;
