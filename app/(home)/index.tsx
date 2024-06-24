@@ -11,7 +11,7 @@ import { Region } from '@/types/modelsType'
 
 // Actions
 import { getRegion } from '@/actions/RegionAction'
-import { fetchLawyer, updateLawyer } from '@/actions/LawyerAction'
+import { fetchAllLawyer, fetchSingleLawyer, updateLawyer } from '@/actions/LawyerAction'
 import { login } from '@/actions/authSystemAction'
 
 // Slice reducers
@@ -49,12 +49,24 @@ export default function Home() {
     }
     
     const getLawyerProfile = async () => {
-        const response = await fetchLawyer(4)
+        const response = await fetchSingleLawyer(4)
         if(response.res){
             console.log("data is fetched")
         }
         console.log("Lawyer not fetched")
     }
+
+
+    const getAllLawyer = async () => {
+        const response = await fetchAllLawyer()
+        console.log(response, "Before showing toast")
+        if (response.res) {
+            Toast.success("All lawyers have been fetched", 3)
+        } else {
+            Toast.fail("Error when fetching all data", 3)
+        }
+    }
+
 
     const logUser = async () => {
         const response = await login({
@@ -77,10 +89,11 @@ export default function Home() {
     
     useEffect(() => {
         // getRegionFromAction()
+        getAllLawyer()
         // getLawyerProfile()
         // updateLawyerProfile()
-        logUser()
-        console.log(regions)
+        // logUser()
+        // console.log(regions)
     }, [])
 
     const DATA = [

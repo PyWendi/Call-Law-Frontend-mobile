@@ -1,13 +1,53 @@
-import { Lawyer, LawyerUpdate } from "@/types/modelsType";
+import { LawyerListData, LawyerProfileData, LawyerUpdate, LawyerSignInFormat } from "@/types/modelsType";
 import { api } from "./api";
 
-interface lawyerProfileData {
-    lawyer: Lawyer | null;
-    res: boolean;
+/**
+ * 
+ * Remain upload Cv and Profile_img
+ * Remain update Availability
+ */
+
+export const registerLawyer = async (data: LawyerSignInFormat): Promise<LawyerProfileData> => {
+    const returnData: LawyerProfileData = {
+        lawyer: null,
+        res: false
+    }
+    
+    try {
+        const response = await api.post("lawyer/", data)
+        if (response.status === 201) {
+            returnData.lawyer = response.data
+            returnData.res = true
+        }
+        return returnData   
+    } catch (error) {
+        return returnData
+    }
 }
 
-export const fetchLawyer = async (id:number):Promise<lawyerProfileData> => {
-    let data:lawyerProfileData = {
+
+export const fetchAllLawyer = async (): Promise<LawyerListData> => {
+    let data: LawyerListData = {
+        lawyers: [],
+        res: false
+    }
+
+    try {
+        const response = await api.get("lawyer/get_all_lawyer/")
+        if (response.status === 200) {
+            console.log(response.data)
+            // data.lawyers = response.data
+            data.res = true
+        }
+        return data
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+}
+
+export const fetchSingleLawyer = async (id:number):Promise<LawyerProfileData> => {
+    let data:LawyerProfileData = {
         lawyer: null,
         res: false
     }
@@ -28,17 +68,13 @@ export const fetchLawyer = async (id:number):Promise<lawyerProfileData> => {
 }
 
 export const updateLawyer = async (id:number, body:LawyerUpdate) => {
-    let data:lawyerProfileData = {
+    let data:LawyerProfileData = {
         lawyer: null,
         res: false
     }
 
     try {
-        const response = await api({
-            url: `lawyer/${id}/`,
-            method: "PUT",
-            data: body
-        })
+        const response = await api.put(`lawyer/${id}/`,body)
 
         if (response.status === 200) {
             console.log(response, "Lawyer update DONE !!")
@@ -47,6 +83,27 @@ export const updateLawyer = async (id:number, body:LawyerUpdate) => {
         }
         return data
         
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+}
+
+
+export const searchLawyerByFirstName = async (search: string): Promise<LawyerListData> => {
+    let data: LawyerListData = {
+        lawyers: [],
+        res: false
+    }
+
+    try {
+        const response = await api.get(`lawyer/search/${search}`)
+        if (response.status === 200) {
+            console.log(response.data)
+            data.lawyers = response.data
+            data.res = true
+        }
+        return data
     } catch (error) {
         console.log(error)
         return data

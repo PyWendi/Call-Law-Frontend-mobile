@@ -1,16 +1,15 @@
-// lawyerSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Lawyer, Domain } from '@/types/modelsType';
+import { Lawyer } from '@/types/modelsType';
 
 const initialState: { lawyerProfile: Lawyer | null; } = {
   lawyerProfile: null,
 };
 
-const lawyerSlice = createSlice({
+const lawyerProfileSlice = createSlice({
   name: 'lawyerProfile',
   initialState,
   reducers: {
-		setLawyer: (state, action: PayloadAction<Lawyer>) => {
+		setLawyerProfile: (state, action: PayloadAction<Lawyer>) => {
 			state.lawyerProfile = action.payload;
 		},
 		updateAvailability: (state, action: PayloadAction<object>) =>{
@@ -24,6 +23,6 @@ const lawyerSlice = createSlice({
 	},
 });
 
-export const { setLawyer, updateAvailability } = lawyerSlice.actions;
+export const { setLawyerProfile, updateAvailability } = lawyerProfileSlice.actions;
 
-export default lawyerSlice.reducer;
+export default lawyerProfileSlice.reducer;

@@ -1,8 +1,8 @@
 // lawyerSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Lawyer } from '@/types/modelsType';
+import { MassLawyerFormat } from '@/types/modelsType';
 
-const initialState: { lawyers: Lawyer[]; } = {
+const initialState: { lawyers: MassLawyerFormat[]; } = {
   	lawyers: [],
 };
 
@@ -10,12 +10,15 @@ const lawyerSlice = createSlice({
 	name: 'lawyers',
 	initialState,
 	reducers: {
-		setLawyer: (state, action:PayloadAction<Lawyer[]>) => {
+		setLawyers: (state, action:PayloadAction<MassLawyerFormat[]>) => {
 			state.lawyers = action.payload
+		},
+		deleteLawyers: (state) => {
+			state.lawyers = []
 		}
 	}	
 });
 
-export const { setLawyer } = lawyerSlice.actions;
+export const { setLawyers } = lawyerSlice.actions;
 
 export default lawyerSlice.reducer;

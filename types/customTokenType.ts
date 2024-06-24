@@ -5,12 +5,21 @@ export interface CustomJwtPayload  extends JwtPayload {
     isClient?: Boolean;
 }
 
-export interface TokenManagement {
-    getJwt: () => Promise<String | null>;
-    setJwt: (token: string) => Promise<Boolean>;
-    deleteJwt: () => Promise<Boolean>;
+export interface Refresh {
+    refresh: string | null;
+}
 
-    setRefresh: (refresh:string) => Promise<Boolean>
-    getRefresh: () => Promise<String | null>
-    deleteRefresh: () => Promise<Boolean>;
+export interface Payload {
+    refresh: string;
+    access: string;
+}
+
+export interface TokenManagement {
+    getJwt: () => Promise<string | null>;
+    setJwt: (token: string) => Promise<boolean>;
+    deleteJwt: () => Promise<boolean>;
+
+    setRefresh: (refresh:string) => Promise<boolean>
+    getRefresh: () => Promise<string | null>
+    deleteRefresh: () => Promise<boolean>;
 }
