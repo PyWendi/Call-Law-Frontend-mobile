@@ -14,6 +14,7 @@ export interface Payload {
     access: string;
 }
 
+
 export interface TokenManagement {
     getJwt: () => Promise<string | null>;
     setJwt: (token: string) => Promise<boolean>;
