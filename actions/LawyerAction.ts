@@ -1,4 +1,4 @@
-import { LawyerListData, LawyerProfileData, LawyerUpdate, LawyerSignInFormat } from "@/types/modelsType";
+import { LawyerListData, LawyerProfileData, LawyerUpdate, LawyerSignInFormat, ProfileCv, ProfileImage, Availability, ProfileCvData, ProfileImageData, AvailabilityData } from "@/types/modelsType";
 import { api } from "./api";
 
 /**
@@ -108,4 +108,72 @@ export const searchLawyerByFirstName = async (search: string): Promise<LawyerLis
         console.log(error)
         return data
     }
+}
+
+export const upload_cv = async (id:number, body:ProfileCv): Promise<ProfileCvData> => {
+    let data: ProfileCvData = {
+        cv_file: "",
+        res: false
+    }
+
+    try {
+        const response = await api.put(`lawyer/${id}/upload_cv`, body)
+        console.log(response)
+        if (response.status === 200) {
+            data.cv_file = response.data.cv_file
+            data.res = true
+        }
+
+        return data
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+
+}
+
+
+export const upload_profile_image = async (id:number, body:ProfileImage): Promise<ProfileImageData> => {
+    let data: ProfileImageData = {
+        profile_img: "",
+        res: false
+    }
+
+    try {
+        const response = await api.put(`lawyer/${id}/update_profile_image/`, body)
+        console.log(response)
+        if (response.status === 200) {
+            data.profile_img = response.data.profile_img
+            data.res = true
+        }
+
+        return data
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+
+}
+
+
+export const update_availability = async (id:number, body:Availability): Promise<AvailabilityData> => {
+    let data: AvailabilityData = {
+        availability: "",
+        res: false
+    }
+
+    try {
+        const response = await api.put(`lawyer/${id}/update_profile_image/`, body)
+        console.log(response)
+        if (response.status === 200) {
+            data.availability = response.data.availability
+            data.res = true
+        }
+
+        return data
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+
 }

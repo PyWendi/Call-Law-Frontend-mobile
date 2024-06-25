@@ -52,13 +52,18 @@ export interface SpecialityData {
 /**
  * Avis section
  */
-export interface Avis{
+export interface Avis {
     id: number;
-    lawyer: NotificationReciever;
+    lawyer: MassLawyerFormat;
     writer: number;
     text?: string | null
     preference: number;
     date: string;
+}
+
+export interface AvisData {
+    avis: Avis[] | [];
+    res: boolean
 }
 
 /**
@@ -221,6 +226,25 @@ export interface Experience {
     owner: number
 }
 
+export interface ExperienceUpdateDataFormat {
+    domain: number;
+    specialities?: number[] | [];
+    title: string
+    description: string;
+    date_beg: string | null;
+    date_end: string | null;
+}
+
+export interface ExperienceCreationData {
+    experience: Experience | null;
+    res: boolean;
+}
+
+export interface ExperienceData {
+    experiences: Experience[] | [];
+    res: boolean;
+}
+
 /**
  * Appointment section
  */
@@ -238,4 +262,59 @@ export interface Appointment {
     isValid: boolean;
     client_id: number;
     created_at: string;
+}
+
+export interface AppointmentCreateFormat {
+    speciality:number;
+    lawyer: number;
+    title: string;
+    description: string;
+}
+
+export interface AppointmentLawyerValidationFormat {
+    message: string | null;
+    date: string;
+}
+
+export interface AppointmentMassData {
+    appointments: Appointment[] | [];
+    res:boolean
+}
+
+export interface AppointmentData {
+    appointments: Appointment | null;
+    res:boolean
+}
+
+
+/**
+ * Profile
+ */
+
+export interface ProfileImage {
+    profile_img: File;
+}
+
+export interface ProfileCv {
+    cv_file: File
+}
+
+export interface Availability{
+    availability: string | null;
+}
+
+
+
+export interface ProfileImageData {
+    profile_img: string;
+    res: boolean;
+}
+
+export interface ProfileCvData {
+    cv_file: string;
+    res: boolean;
+}
+export interface AvailabilityData {
+    availability: string;
+    res: boolean;
 }

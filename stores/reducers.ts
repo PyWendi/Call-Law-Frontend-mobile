@@ -7,7 +7,7 @@ import domainSlice from "@/slices/domainSlice";
 import notificationSlice from "@/slices/notificationSlice";
 import appointmentSlice from "@/slices/appointmentSlice";
 import specialitySlice from "@/slices/specialitySlice";
-import avisslice from "@/slices/avisslice";
+import avisSlice from "@/slices/avisSlice";
 import experienceSlice from "@/slices/experienceSlice";
 
 
@@ -20,6 +20,6 @@ export default combineReducers({
     notifications: notificationSlice,
     appointments: appointmentSlice,
     specialities: specialitySlice,
-    avis: avisslice,
+    avis: avisSlice,
     experiences: experienceSlice,
 })
