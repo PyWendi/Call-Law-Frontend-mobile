@@ -89,7 +89,7 @@ export default function Home() {
     
     useEffect(() => {
         // getRegionFromAction()
-        getAllLawyer()
+        // getAllLawyer()
         // getLawyerProfile()
         // updateLawyerProfile()
         // logUser()
@@ -146,10 +146,12 @@ export default function Home() {
                 </View>
 
                 <View>
-                    <Button
-                    title='Tailwing button'>
-                        
-                    </Button>
+                    <Link href="/modal">
+                        <Button
+                        title='Tailwing button'>
+                            
+                        </Button>
+                    </Link>
                 </View>
                 
             </ScrollView>

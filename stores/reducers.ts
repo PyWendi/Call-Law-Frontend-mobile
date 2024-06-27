@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import interactionSlice from "@/slices/interactionSlice";
 import regionSlice from "@/slices/regionSlice";
 import lawyerSlice from "@/slices/lawyerSlice";
 import lawyerProfileSlice from "@/slices/lawyerProfileSlice";
@@ -12,6 +13,8 @@ import experienceSlice from "@/slices/experienceSlice";
 
 
 export default combineReducers({
+    interactions: interactionSlice,
+
     lawyerProfile: lawyerProfileSlice,
     clientProfile: clientProfileSlice,
     regions: regionSlice,

@@ -7,6 +7,23 @@ import { api } from "./api";
  * Remain upload profile pic
  */
 
+export const checkAuthentitcation = async (): Promise<boolean> => {
+    try {
+        const response = await api.get("client/check_auth/")
+        console.log(response, "Check for authentication")
+        if(response.status === 200) {
+            return true
+        } else if(response.status === 401){
+            return false
+        }
+        
+        return false
+    } catch (error) {
+        console.log(error)
+        return false
+    }
+}
+
 export const fetchClientProfile = async (id:number): Promise<ClientProfileData> => {
     let data:ClientProfileData = {
         client: null,

@@ -8,9 +8,9 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "splash": {
-      "image": "./assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "image": "./assets/logo/icons8-shield-100.png",
+      "resizeMode": "cover",
+      "backgroundColor": "#EDFCF3"
     },
     "ios": {
       "supportsTablet": true
@@ -24,6 +24,7 @@
     "web": {
       "bundler": "metro",
       "output": "static",
+      "backgroundColor":"#ffffff",
       "favicon": "./assets/logo/icons8-shield-100.png"
     },
     "plugins": [
