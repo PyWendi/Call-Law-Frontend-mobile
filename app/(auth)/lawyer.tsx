@@ -4,6 +4,7 @@ import { useEffect} from "react"
 import { checkAuthentitcation } from "@/actions/clientAction"
 import { styles } from "@/styles/mainstyle"
 import LoginForm from "@/components/forms/LoginForm"
+import SignLawyerForm from "@/components/forms/SignLawyer"
 
 
 export default function SignLawyer() {
@@ -30,7 +31,7 @@ export default function SignLawyer() {
                 width: "100%",
                 justifyContent: "center",
             }}>
-                <LoginForm/>
+                <SignLawyerForm/>
             </SafeAreaView>
 
             <View style={styles.waveBottom}>

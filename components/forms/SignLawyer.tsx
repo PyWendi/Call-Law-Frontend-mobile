@@ -1,25 +1,29 @@
 import { View, Text, Button, ScrollView } from "react-native"
 // import enUS from 'antd-mobile/es/locales/en-US'
-import { Picker } from "@ant-design/react-native"
+import { Picker, List, Checkbox } from "@ant-design/react-native"
 import type { PickerValue, PickerValueExtend } from "@ant-design/react-native"
-import { Toast } from "@ant-design/react-native"
+import { Toast, Modal, WhiteSpace,WingBlank } from "@ant-design/react-native"
 import { styles } from "@/styles/mainstyle"
 import { useRouter } from "expo-router"
 import { useEffect, useState } from "react"
 
 import CustomButtonWithIcon from "@/components/ButtonComponent"
 import CustomInputSimple from "../CustomWithoutLineComponent"
-import { login } from "@/actions/authSystemAction"
 import { getRegion } from "@/actions/RegionAction"
 
-import { ClientSignInFormat, Region } from "@/types/modelsType"
+import { ClientSignInFormat, LawyerSignInFormat, Region } from "@/types/modelsType"
 import { registerClient } from "@/actions/clientAction"
+import { fetchAllDomain } from "@/actions/domainAction"
+import { registerLawyer } from "@/actions/LawyerAction"
 
 
 // import { AppDispatch, RootState } from "@/stores/store"
 // import { useSelector, useDispatch } from "react-redux"
 // import { setIsLoading, setRequestLoading, stopIsLoading } from "@/slices/interactionSlice"
 
+
+const AgreeItem = Checkbox.AgreeItem
+const CheckboxItem = Checkbox.CheckboxItem
 
 interface SelectFormat {
     label: string;
@@ -29,6 +33,7 @@ interface SelectFormat {
 export default function SignLawyerForm () {
 
     const router = useRouter()
+    const [modal, setModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [first_name, setFirstName] = useState("")
     const [last_name, setLastName] = useState("")
@@ -38,8 +43,13 @@ export default function SignLawyerForm () {
     const [region, setRegion] = useState<any>()
     const [regionDesign, setRegionDesign] = useState("")
     const [regionData, setRegionData] = useState<SelectFormat[] | []>([])
-    const [domains, setDomain] = useState([])
-    const [domainData, setDomainData] = useState([])
+    const [domains, setDomain] = useState<SelectFormat[] | []>([
+        {label: "D1", value: 1},
+        {label: "D2", value: 2},
+        {label: "D3", value: 3},
+        {label: "D4", value: 4},
+    ])
+    const [domainDataChecked, setDomainDataChecked] = useState([])
     const [password, setPassword] = useState("")
     const [password1, setPassword1] = useState("")
 
@@ -67,6 +77,11 @@ export default function SignLawyerForm () {
         setVisible(true)
     }
 
+    const closeModal = () => {
+        console.log(domainDataChecked, "Data checked")
+        setModal(false)
+    }
+
     const InputIsvalid = (): boolean => {
         if(validateEmail(email)) {
             setIsValidEmail(true)
@@ -90,11 +105,6 @@ export default function SignLawyerForm () {
         return false
     }
 
-    function clearInput() {
-        setEmail("")
-        setPassword("")
-    }
-    
     const regionMap = regionData.reduce((acc:any, curr:any) => {
         acc[curr.value] = curr.label;
         return acc;
@@ -126,21 +136,37 @@ export default function SignLawyerForm () {
         }
     }
 
+    async function getDomainData () {
+        const response = await fetchAllDomain()
+        if (response.res) {
+            console.log(response.domains)
+            let data: SelectFormat[] = []
+            response.domains.map((elem) => [
+                data.push({
+                    label: elem.name,
+                    value: elem.id
+                })
+            ])
+            setDomain(data)
+        }
+    }
+
     const validate = async () => {
         setLoading(true)
         if(InputIsvalid() && validatePassword()){
-            let data:ClientSignInFormat = {
+            let data:LawyerSignInFormat = {
                 first_name: first_name,
                 last_name: last_name,
                 email: email,
                 phone: phone,
                 region: region,
                 location: location,
-                password: password
+                password: password,
+                domains: domainDataChecked
             }
             console.log(data)
             
-            const response = await registerClient(data)
+            const response = await registerLawyer(data)
             if(response.res) {
                 Toast.success("You have been registered.", 2)
                 setLoading(false)
@@ -167,17 +193,74 @@ export default function SignLawyerForm () {
 
     useEffect(() => {
         getRegionData() 
+        getDomainData()
     }, [])
-
-    useEffect(() => {
-        console.log(region)
-        // alert("region changed")
-    }, [region])
 
 
     return (
         <View style={{width: "90%", margin: "auto", borderRadius: 7, paddingBottom: 20}}>
             {/* Welcome text */}
+
+            <Modal
+                style={{
+                    width: "75%",
+                    position: "absolute",
+                    top: "40%",
+                    left: "12%",
+                    transform: [
+                        { translateX: '50%' },
+                        { translateY: '50%' }
+                    ],
+                    borderRadius: 6
+                }}
+                popup
+                visible={modal}
+                onClose={() => closeModal()}>
+                <View style={{ paddingVertical: 20, paddingHorizontal: 20 }}>
+                    <View>
+                        <Text style={[styles.color_green, {
+                            fontSize: 20,
+                            textAlign:"center",
+                            paddingBottom: 10
+                        }]}>
+                            Choose your domains
+                        </Text>
+                    </View>
+
+                    <View>
+                        <List renderHeader="Domain Text">
+                            {domains.map(domain => (
+                                <CheckboxItem
+                                    key={domain.value}
+                                    onChange={(event) => {
+                                        const isSelected = domainDataChecked.includes(domain.value);
+                                        let updatedDomains: any;
+                                        if (isSelected) {
+                                            // If the domain is already selected, filter it out (remove)
+                                            updatedDomains = domainDataChecked.filter((selectedDomain) => selectedDomain!== domain.value);
+                                        } else {
+                                            // If not selected, add it to the array
+                                            updatedDomains = [...domainDataChecked, domain.value];
+                                        }
+                                        console.log(updatedDomains)
+                                        setDomainDataChecked(updatedDomains); // Update state with the new selection array
+                                    }}>
+                                    {domain.label}
+                                </CheckboxItem>
+                            ))}
+                        </List>
+                    </View>
+
+                    <CustomButtonWithIcon 
+                    loading={false}
+                    text="Close modal"
+                    type="warning"
+                    buttonClicked={() => setModal(false)}
+                    />
+                </View>
+            </Modal>
+
+
             <View style={{flex: 1, alignItems: "center", paddingBottom: 40}}>
                 <Text style={[styles.auth_action_title, {fontFamily: "dm-sans"}]}>
                     Create your account
@@ -187,7 +270,7 @@ export default function SignLawyerForm () {
             {/* Button section */}
 
             <ScrollView>
-                <View style={{height: 450}}>
+                <View style={{height: 500}}>
                     
                     <View style={[styles.form_ask, {
                         paddingBottom: 5,
@@ -288,6 +371,15 @@ export default function SignLawyerForm () {
                             </View>
                         </Picker>
 
+                        <View style={{ padding: 10, width: "95%", margin:'auto' }}>
+                            {/* <Button title="Cancel" /> */}
+                            <CustomButtonWithIcon 
+                            text={"Select domains"}
+                            type="outlined"
+                            buttonClicked={() => setModal(true)}
+                            />
+                        </View>
+
                         <View style={[styles.centered_elem, {width: "100%"}]}>
                             <CustomInputSimple 
                             label="Password" 
@@ -314,6 +406,8 @@ export default function SignLawyerForm () {
 
                     </View>
 
+                    
+
                 </View>
 
 
@@ -321,25 +415,25 @@ export default function SignLawyerForm () {
 
             <View>
                 
-            <View style={{width: "90%", marginBottom:20, margin: "auto"}}>
+                <View style={{width: "90%", marginBottom:20, margin: "auto"}}>
+                    <CustomButtonWithIcon 
+                    loading={loading}
+                    text="Validate"
+                    type="primary"
+                    buttonClicked={validate}
+                    />
+                </View>
+
+                <View>
+                    <View style={{width: "90%", paddingTop: 20, margin: "auto"}}>
                         <CustomButtonWithIcon 
-                        loading={loading}
-                        text="Validate"
-                        type="primary"
-                        buttonClicked={validate}
+                        loading={false}
+                        text="Go back to choice screen"
+                        type="outlined"
+                        buttonClicked={navigateToChoice}
                         />
                     </View>
-
-                    <View>
-                        <View style={{width: "90%", paddingTop: 20, margin: "auto"}}>
-                            <CustomButtonWithIcon 
-                            loading={false}
-                            text="Go back to choice screen"
-                            type="outlined"
-                            buttonClicked={navigateToChoice}
-                            />
-                        </View>
-                    </View>
+                </View>
             </View>
 
         </View>

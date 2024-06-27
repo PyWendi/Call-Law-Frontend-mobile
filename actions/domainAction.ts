@@ -15,7 +15,7 @@ export const fetchAllDomain = async (): Promise<DomainData> => {
             data.domains = response.data.results
             data.res = true
         }
-
+        console.log(response)
         return data
     } catch (error) {
         console.log(error)
