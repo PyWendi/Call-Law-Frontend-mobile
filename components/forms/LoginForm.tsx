@@ -24,7 +24,7 @@ export default function LoginForm () {
 
 
     // const dispatch = useDispatch<AppDispatch>()
-    // const loading = useSelector((state:RootState) => state.interactions)
+    // const loadingState = useSelector((state:RootState) => state.interactions)
 
     const validateEmail = (email:string) => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -60,6 +60,7 @@ export default function LoginForm () {
                 password: password
             }
             const response = await login(data)
+            
             if(response) {
                 setLoading(false)
                 clearInput()

@@ -11,6 +11,7 @@ export default function TabLayout() {
 		headerTintColor: 'grey',
 		headerTitleStyle: {
 			fontWeight: 'bold',
+			color: "#108B54"
 		},
 		headerShown: true,
       }}>
@@ -20,7 +21,6 @@ export default function TabLayout() {
 		options={{
 			title:"Sign in", 
 			contentStyle: {backgroundColor: "white"},
-			headerTintColor: "#108B54",
 		}}/>
 		<Stack.Screen 
 		name="choice" 

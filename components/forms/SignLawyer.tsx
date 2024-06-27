@@ -26,7 +26,7 @@ interface SelectFormat {
     value: any;
 }
 
-export default function SignClientForm () {
+export default function SignLawyerForm () {
 
     const router = useRouter()
     const [loading, setLoading] = useState(false)
@@ -38,6 +38,8 @@ export default function SignClientForm () {
     const [region, setRegion] = useState<any>()
     const [regionDesign, setRegionDesign] = useState("")
     const [regionData, setRegionData] = useState<SelectFormat[] | []>([])
+    const [domains, setDomain] = useState([])
+    const [domainData, setDomainData] = useState([])
     const [password, setPassword] = useState("")
     const [password1, setPassword1] = useState("")
 

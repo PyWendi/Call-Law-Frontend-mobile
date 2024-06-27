@@ -1,4 +1,4 @@
-import { ClientProfileData, ClientUpdateFormat, ProfileImage, ProfileImageData } from "@/types/modelsType";
+import { ClientSignInFormat, ClientProfileData, ClientUpdateFormat, ProfileImage, ProfileImageData } from "@/types/modelsType";
 import { api } from "./api";
 
 
@@ -6,6 +6,25 @@ import { api } from "./api";
  * 
  * Remain upload profile pic
  */
+
+export const registerClient = async (data: ClientSignInFormat): Promise<ClientProfileData> => {
+    const returnData: ClientProfileData = {
+        client: null,
+        res: false
+    }
+    
+    try {
+        const response = await api.post("client/", data)
+        if (response.status === 201) {
+            returnData.client = response.data
+            returnData.res = true
+        }
+        return returnData   
+    } catch (error) {
+        return returnData
+    }
+}
+
 
 export const checkAuthentitcation = async (): Promise<boolean> => {
     try {

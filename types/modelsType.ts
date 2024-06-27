@@ -89,9 +89,9 @@ export interface ClientSignInFormat {
     last_name: string;
     email: string;
     phone: string;
-    password: string;
     region: number; // Region Id
     location: string;
+    password: string;
 }
 
 export interface ClientUpdateFormat {
