@@ -4,23 +4,39 @@ import { useEffect} from "react"
 import { checkAuthentitcation } from "@/actions/clientAction"
 import { styles } from "@/styles/mainstyle"
 import LoginForm from "@/components/forms/LoginForm"
+import { decodedToken } from "@/stores/tokenManagement"
+import { CustomJwtPayload } from "@/types/customTokenType"
 
 
 export default function Login() {
 
     const router = useRouter()
 
-    function navigateToMainPage(){
-        router.navigate("/modal")
+    function navigateToClientHome(){
+        router.navigate("/home/client/")
+    }
+
+    function navigateToLawyerHome(){
+        router.navigate("/home/lawyer/")
     }
 
     async function checkAuth() {
         const response = await checkAuthentitcation()
-        if (response) navigateToMainPage()
+        if (response){
+            const decodedData:CustomJwtPayload | null = await decodedToken()
+            
+            if (decodedData) {
+                if(decodedData.isClient) {
+                    navigateToClientHome()
+                } else {
+                    navigateToLawyerHome()
+                }
+            }
+        }
     }
 
     useEffect(() => {
-        // checkAuth()
+        checkAuth()
     }, [])
 
     return (

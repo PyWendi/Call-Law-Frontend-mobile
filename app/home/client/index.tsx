@@ -3,10 +3,10 @@ import { View, Text } from "react-native";
 import { StyleSheet, StatusBar, FlatList } from "react-native";
 import { Region } from "@/types/modelsType";
 import { useSelector } from "react-redux";
-import CustomButton from "../../components/ButtonComponent"
+import CustomButton from "../../../components/ButtonComponent"
 import React from 'react';
 
-export default function DetailScreen() {
+export default function ClientHome() {
 
     let regions:Region[] | [] = useSelector((state:any) => state.regions.regions)
 
@@ -16,8 +16,8 @@ export default function DetailScreen() {
             style={{
                 color:"#f84aff"
             }}
-            >Inside detailed function</Text>
-            <Link href="/settings">
+            >Inside Client Home</Text>
+            <Link href="/home/client/profile/">
                 Go to setting
             </Link>
             <View style={style.container}>
@@ -27,7 +27,6 @@ export default function DetailScreen() {
                     keyExtractor={(item) => item.id.toString()}
                 />
             </View>
-            <CustomButton/>
         </View>
     )
 }

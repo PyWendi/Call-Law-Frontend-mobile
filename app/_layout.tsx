@@ -45,12 +45,11 @@ export default function RootLayout() {
             headerShown: false
           }}>
             <Stack.Screen name="index" options={{ headerShown: false, contentStyle: {backgroundColor: "white"} }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(home)" options={{ headerShown: false }} />
-            {/* <Stack.Screen name="modal" options={{ header:LogoHeaderComponent, headerShown:true }} /> */}
-            <Stack.Screen name="modal" options={{headerShown:true }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} /> {/* /login /client /lawyer /choice */}
+            <Stack.Screen name="home" options={{ headerShown: false }} /> {/* /home/ | client lawyer */}
+            {/* <Stack.Screen name="modal" options={{headerShown:true }} /> */}
             <Stack.Screen name="+not-found" options={{ headerShown: false }}/>
+            {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
           </Stack>
           
         </AntProvider>

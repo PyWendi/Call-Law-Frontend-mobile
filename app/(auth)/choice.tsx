@@ -2,6 +2,8 @@ import { View, Text, SafeAreaView, Image } from "react-native"
 import CustomButtonWithIcon from "@/components/ButtonComponent"
 import { styles } from "@/styles/mainstyle"
 import { useRouter } from "expo-router"
+import { useEffect } from "react"
+import { checkAuthentitcation } from "@/actions/clientAction"
 
 export default function HomeScreen() {
 
@@ -18,6 +20,15 @@ export default function HomeScreen() {
     function navigateToHome() {
         router.navigate("/")
     }
+
+    async function checkAuth() {
+        const response = await checkAuthentitcation()
+        if (response) navigateToHome()
+    }
+
+    useEffect(() => {
+        // checkAuth()
+    }, [])
 
     return (
         <>

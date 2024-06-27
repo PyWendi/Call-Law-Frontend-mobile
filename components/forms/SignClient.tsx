@@ -87,11 +87,6 @@ export default function SignClientForm () {
         }
         return false
     }
-
-    function clearInput() {
-        setEmail("")
-        setPassword("")
-    }
     
     const regionMap = regionData.reduce((acc:any, curr:any) => {
         acc[curr.value] = curr.label;
@@ -151,14 +146,6 @@ export default function SignClientForm () {
         setLoading(false)
     }
 
-    function navigateToLogin(){
-        router.navigate("/login")
-    }
-
-    function navigateToMainPage(){
-        router.navigate("/modal")
-    }
-
     function navigateToChoice(){
         router.navigate("/choice")
     }
@@ -169,7 +156,6 @@ export default function SignClientForm () {
 
     useEffect(() => {
         console.log(region)
-        // alert("region changed")
     }, [region])
 
 

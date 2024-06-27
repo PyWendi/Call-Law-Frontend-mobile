@@ -3,7 +3,8 @@ import { useRouter } from "expo-router"
 import { useEffect} from "react"
 import { checkAuthentitcation } from "@/actions/clientAction"
 import { styles } from "@/styles/mainstyle"
-import LoginForm from "@/components/forms/LoginForm"
+import { CustomJwtPayload } from "@/types/customTokenType"
+import { decodedToken } from "@/stores/tokenManagement"
 import SignLawyerForm from "@/components/forms/SignLawyer"
 
 
@@ -11,17 +12,31 @@ export default function SignLawyer() {
 
     const router = useRouter()
 
-    function navigateToMainPage(){
-        router.navigate("/modal")
+    function navigateToClientHome(){
+        router.navigate("/home/client/")
+    }
+
+    function navigateToLawyerHome(){
+        router.navigate("/home/lawyer/")
     }
 
     async function checkAuth() {
         const response = await checkAuthentitcation()
-        if (response) navigateToMainPage()
+        if (response){
+            const decodedData:CustomJwtPayload | null = await decodedToken()
+            
+            if (decodedData) {
+                if(decodedData.isClient) {
+                    navigateToClientHome()
+                } else {
+                    navigateToLawyerHome()
+                }
+            }
+        }
     }
 
     useEffect(() => {
-        // checkAuth()
+        checkAuth()
     }, [])
 
     return (

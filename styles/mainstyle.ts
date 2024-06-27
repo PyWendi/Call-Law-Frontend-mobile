@@ -77,5 +77,20 @@ export const styles = StyleSheet.create({
 	},
 	centered_elem: {
 		margin: "auto"
+	},
+
+	tab_elevate_style: {
+		borderTopLeftRadius:50,
+		borderTopRightRadius: 50,
+		paddingHorizontal:30,
+		paddingVertical:20,
+		backgroundColor: "white",
+		
+		shadowColor: "#f6f6f6",
+		shadowRadius: 70,
+		shadowOffset: {
+			width: 0,
+			height: -20
+		}
 	}
 })

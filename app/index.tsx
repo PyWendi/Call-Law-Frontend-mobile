@@ -4,6 +4,8 @@ import { useEffect } from "react"
 import { checkAuthentitcation } from "@/actions/clientAction"
 import { styles } from "@/styles/mainstyle"
 import CustomButtonWithIcon from "@/components/ButtonComponent"
+import { CustomJwtPayload } from "@/types/customTokenType"
+import { decodedToken } from "@/stores/tokenManagement"
 
 
 export default function HomeScreen() {
@@ -18,17 +20,31 @@ export default function HomeScreen() {
         router.navigate("/choice")
     }
 
-    function navigateToHome(){
-        router.navigate("/modal")
+    function navigateToClientHome(){
+        router.navigate("/home/client/")
+    }
+
+    function navigateToLawyerHome(){
+        router.navigate("/home/lawyer/")
     }
 
     async function checkAuth() {
         const response = await checkAuthentitcation()
-        if (response) navigateToHome()
+        if (response){
+            const decodedData:CustomJwtPayload | null = await decodedToken()
+            
+            if (decodedData) {
+                if(decodedData.isClient) {
+                    navigateToClientHome()
+                } else {
+                    navigateToLawyerHome()
+                }
+            }
+        }
     }
 
     useEffect(() => {
-        // checkAuth()
+        checkAuth()
     }, [])
 
     return (

@@ -2,6 +2,8 @@ import { View,Text, SafeAreaView } from "react-native"
 import { useRouter } from "expo-router"
 import { useEffect} from "react"
 import { checkAuthentitcation } from "@/actions/clientAction"
+import { CustomJwtPayload } from "@/types/customTokenType"
+import { decodedToken } from "@/stores/tokenManagement"
 import { styles } from "@/styles/mainstyle"
 import SignClientForm from "@/components/forms/SignClient"
 
@@ -9,18 +11,32 @@ export default function SignClient() {
 
     const router = useRouter()
 
-    function navigateToMainPage(){
-        router.navigate("/modal")
+    function navigateToClientHome(){
+        router.navigate("/home/client/")
+    }
+
+    function navigateToLawyerHome(){
+        router.navigate("/home/lawyer/")
     }
 
     async function checkAuth() {
         const response = await checkAuthentitcation()
-        if (response) navigateToMainPage()
+        if (response){
+            const decodedData:CustomJwtPayload | null = await decodedToken()
+            
+            if (decodedData) {
+                if(decodedData.isClient) {
+                    navigateToClientHome()
+                } else {
+                    navigateToLawyerHome()
+                }
+            }
+        }
     }
 
-    // useEffect(() => {
-    //     checkAuth()
-    // }, [])
+    useEffect(() => {
+        checkAuth()
+    }, [])
 
     return (
         <>

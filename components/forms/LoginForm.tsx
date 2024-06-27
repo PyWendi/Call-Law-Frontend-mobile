@@ -70,16 +70,6 @@ export default function LoginForm () {
         setLoading(false)
     }
 
-    
-
-    function navigateToLogin(){
-        router.navigate("/login")
-    }
-
-    function navigateToMainPage(){
-        router.navigate("/modal")
-    }
-
     function navigateToChoice(){
         router.navigate("/choice")
     }

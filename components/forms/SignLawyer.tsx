@@ -1,8 +1,7 @@
-import { View, Text, Button, ScrollView } from "react-native"
-// import enUS from 'antd-mobile/es/locales/en-US'
+import { View, Text, ScrollView } from "react-native"
 import { Picker, List, Checkbox } from "@ant-design/react-native"
 import type { PickerValue, PickerValueExtend } from "@ant-design/react-native"
-import { Toast, Modal, WhiteSpace,WingBlank } from "@ant-design/react-native"
+import { Toast, Modal } from "@ant-design/react-native"
 import { styles } from "@/styles/mainstyle"
 import { useRouter } from "expo-router"
 import { useEffect, useState } from "react"
@@ -11,15 +10,10 @@ import CustomButtonWithIcon from "@/components/ButtonComponent"
 import CustomInputSimple from "../CustomWithoutLineComponent"
 import { getRegion } from "@/actions/RegionAction"
 
-import { ClientSignInFormat, LawyerSignInFormat, Region } from "@/types/modelsType"
-import { registerClient } from "@/actions/clientAction"
+import { LawyerSignInFormat } from "@/types/modelsType"
 import { fetchAllDomain } from "@/actions/domainAction"
 import { registerLawyer } from "@/actions/LawyerAction"
 
-
-// import { AppDispatch, RootState } from "@/stores/store"
-// import { useSelector, useDispatch } from "react-redux"
-// import { setIsLoading, setRequestLoading, stopIsLoading } from "@/slices/interactionSlice"
 
 
 const AgreeItem = Checkbox.AgreeItem
@@ -177,14 +171,6 @@ export default function SignLawyerForm () {
             }
         }
         setLoading(false)
-    }
-
-    function navigateToLogin(){
-        router.navigate("/login")
-    }
-
-    function navigateToMainPage(){
-        router.navigate("/modal")
     }
 
     function navigateToChoice(){

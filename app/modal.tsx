@@ -8,8 +8,8 @@ import InputComponent from '@/components/InputComponent';
 import CustomInput from '@/components/CustomInputComponent';
 
 export default function Modal() {
-  // If the page was reloaded or navigated to directly, then the modal should be presented as
-  // a full screen page. You may need to change the UI to account for this.
+	const router = useRouter()
+
 	const childClicked = () => {
 		Toast.info("Child has been clicked : "+inputValue, 1)
 	}
@@ -43,7 +43,7 @@ export default function Modal() {
 		text="Validate update" 
 		icon="check" 
 		type="outlined" 
-		buttonClicked={childClicked} />
+		buttonClicked={() => router.navigate("/home/index")}  />
 		{/* <InputComponent/> */}
 		<CustomInput 
 			type="password" 
