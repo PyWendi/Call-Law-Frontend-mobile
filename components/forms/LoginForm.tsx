@@ -64,7 +64,7 @@ export default function LoginForm () {
             if(response) {
                 setLoading(false)
                 clearInput()
-                router.navigate("/modal")
+                router.navigate("/home/client/")
             }
         }
         setLoading(false)

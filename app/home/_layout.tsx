@@ -10,13 +10,15 @@ export default function RootLayout() {
     
     <Stack screenOptions={{
       headerShown: false,
+      contentStyle: {backgroundColor: "white"},
       header(props) {
         return (<HeaderComponent/>)
       },
     }}>
       <Stack.Screen name="lawyer" options={{ headerShown: true }} />
       <Stack.Screen name="client" options={{ headerShown: true }} />
-      <Stack.Screen name="(profile)" options={{ headerShown: true }} />
+      <Stack.Screen name="profile" options={{ headerShown: true }} />
+      <Stack.Screen name="utils" options={{ headerShown: true }} />
     </Stack>
   );
 }

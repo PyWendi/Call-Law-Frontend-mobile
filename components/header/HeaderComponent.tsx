@@ -42,21 +42,21 @@ export default function HeaderComponent () {
                         <View style={{paddingRight:15}}>
                             <FontAwesome 
                                 size={22}
-                                color={"grey"}
-                                name="bell" onPress={() => console.log("nofit pressed")} />
+                                color={"#108B54"}
+                                name="bell-o" onPress={() => console.log("nofit pressed")} />
                         </View>
 
                         <View style={{paddingRight:15}}>
                             <FontAwesome 
                                 size={22}
-                                color={"grey"}
-                                name="user" onPress={() => console.log("Profile pressed")} />
+                                color={"#108B54"}
+                                name="user-circle-o" onPress={() => console.log("Profile pressed")} />
                         </View>
 
                         <View style={{paddingRight:15}}>
                             <FontAwesome 
                                 size={22}
-                                color={"grey"}
+                                color={"#108B54"}
                                 // name="ellipsis-v" onPress={() => router.back()} />
                                 name="bars" onPress={() => console.log("Menu pressed")} />
                         </View>
