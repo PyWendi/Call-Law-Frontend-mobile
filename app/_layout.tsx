@@ -10,8 +10,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '@/stores/store';
 import { Provider as AntProvider } from '@ant-design/react-native';
 
-import LogoHeaderComponent from '@/components/LogoHeaderComponent';
-
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -45,11 +43,9 @@ export default function RootLayout() {
             headerShown: false
           }}>
             <Stack.Screen name="index" options={{ headerShown: false, contentStyle: {backgroundColor: "white"} }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} /> {/* /login /client /lawyer /choice */}
-            <Stack.Screen name="home" options={{ headerShown: false }} /> {/* /home/ | client lawyer */}
-            <Stack.Screen name="utils" options={{headerShown:true }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} /> 
+            <Stack.Screen name="home" options={{ headerShown: false }} /> 
             <Stack.Screen name="+not-found" options={{ headerShown: false }}/>
-            {/* <Stack.Screen name="(tabs)" options={{ headerShown: false }} /> */}
           </Stack>
           
         </AntProvider>

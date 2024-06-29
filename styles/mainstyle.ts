@@ -49,9 +49,19 @@ export const styles = StyleSheet.create({
 		margin: "auto",
 		width: "100%",
 	},
+	// waveTop: {
+	// 	position: 'absolute',
+	// 	top: 0,
+	// 	left: 0,
+	// 	right: 0,
+	// 	overflow: "hidden",
+	//   	width: '100%',
+	// 	height: '40%', // Adjust based on your needs
+	// 	padding:0,
+	// },
 	waveTop: {
 		position: 'absolute',
-		top: 0,
+		top: -140,
 		left: 0,
 		right: 0,
 		overflow: "hidden",
@@ -61,7 +71,7 @@ export const styles = StyleSheet.create({
 	},
 	waveBottom: {
 		position: 'absolute',
-		bottom: 0,
+		bottom: -140,
 		left: 0,
 		padding: 0,
 		margin:0,

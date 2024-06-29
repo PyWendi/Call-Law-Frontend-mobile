@@ -3,7 +3,7 @@ import { Stack } from 'expo-router';
 // import LogoHeaderComponent from '@/components/LogoHeaderComponent';
 import HeaderComponent from '@/components/header/HeaderComponent';
 
-export default function RootLayout() {
+export default function UtilsLayout() {
   // const colorScheme = useColorScheme();
 
   return (

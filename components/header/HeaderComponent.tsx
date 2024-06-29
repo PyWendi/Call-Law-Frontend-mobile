@@ -24,7 +24,7 @@ export default function HeaderComponent () {
                         (<FontAwesome 
                         size={20}
                         color={"grey"}
-                        name="arrow-left" onPress={() => router.back()} />)}    
+                        name="chevron-left" onPress={() => router.back()} />)}    
                     </View>
 
                     {/* Logo */}

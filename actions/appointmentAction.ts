@@ -1,27 +1,6 @@
 import { AppointmentCreateFormat, AppointmentData, AppointmentLawyerValidationFormat, AppointmentMassData } from "@/types/modelsType";
 import { api } from "./api";
 
-export const getAppointmentsForLawyer = async ():Promise<AppointmentMassData> => {
-    let data: AppointmentMassData = {
-        appointments: [],
-        res: false
-    }
-
-
-    try {
-        const response = await api.get("appointment/for/lawyer")
-        if(response.status === 200) {
-            data.appointments = response.data
-            data.res = true
-        }
-
-        return data
-    } catch (error) {
-        console.log(error)
-        return data
-    }
-}
-
 
 export const getAppointmentsForClient = async ():Promise<AppointmentMassData> => {
     let data: AppointmentMassData = {
