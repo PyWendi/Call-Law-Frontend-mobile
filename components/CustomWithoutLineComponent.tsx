@@ -9,7 +9,7 @@ interface InputProps {
     placeholder?: string;
     parentValue: string;
     setParenValue: (value:string) => void;
-    label: string;
+    label?: string;
 }
 
 const CustomInputSimple: React.FC<InputProps> = ({type, placeholder, parentValue, label, setParenValue}) => {
@@ -17,6 +17,7 @@ const CustomInputSimple: React.FC<InputProps> = ({type, placeholder, parentValue
     return (
         <>
             <View style={styles.container}>
+                {(label) && (
                 <Text style={[{
                     fontSize: 17,
                     paddingBottom: 7
@@ -27,6 +28,7 @@ const CustomInputSimple: React.FC<InputProps> = ({type, placeholder, parentValue
                 }]}>
                     {label}
                 </Text>
+                )}
 
                 {/* Check if type is 'password' and render a secure TextInput */}
                 {type === 'password'? (

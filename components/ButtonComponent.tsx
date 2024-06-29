@@ -4,9 +4,9 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { ActivityIndicator } from '@ant-design/react-native';
 
 interface ButtonPropsType {
-    text:string;
+    text?:string;
     icon?:string; 
-    type: "primary" | "primary-low" | "outlined" | "outlined_danger" | "warning";
+    type: "primary" | "primary-low" | "outlined" | "outlined_danger" | "warning" | "search";
     buttonClicked?: () => void;
     loading?: boolean;
 }
@@ -24,6 +24,18 @@ const CustomButtonWithIcon:React.FC<ButtonPropsType> = ({text, loading, icon, ty
                         <View style={styles.primary}>
                             {(icon) && (<FontAwesome size={28} name={icon} color={"#ffffff"}/>)}
                             {(loading) ? (<ActivityIndicator color={"white"}/>) : (<Text style={styles.text}>{ text }</Text>)}
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            )
+            break;
+
+        case "search":
+            content = (
+                <View>
+                    <TouchableOpacity style={[styles.primary, styles.max_width]} onPress={() => buttonClicked && buttonClicked()}>
+                        <View style={styles.primary}>
+                            {(loading) ? (<ActivityIndicator color={"white"}/>) : <FontAwesome size={20} name={icon} color={"#ffffff"}/>}
                         </View>
                     </TouchableOpacity>
                 </View>
