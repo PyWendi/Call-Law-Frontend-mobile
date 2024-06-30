@@ -35,8 +35,8 @@ export const fetchAllLawyer = async (): Promise<LawyerListData> => {
     try {
         const response = await api.get("lawyer/get_all_lawyer/")
         if (response.status === 200) {
-            console.log(response.data)
-            // data.lawyers = response.data
+            // console.log(response.data)
+            data.lawyers = response.data
             data.res = true
         }
         return data

@@ -131,7 +131,9 @@ export interface MassLawyerFormat {
     id: number;
     first_name: string;
     last_name: string;
-    profile_img?: string | null;
+    location: string | null;
+    phone: string;
+    profile_img: string | null;
     domains: Domain[];
 }
 

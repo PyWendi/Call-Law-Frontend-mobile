@@ -1,7 +1,5 @@
-import { useRouter } from "expo-router";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { StyleSheet, ScrollView, Dimensions } from "react-native";
-import { Appointment } from "@/types/modelsType";
 import { useSelector, useDispatch } from "react-redux";
 import CustomButton from "../../../components/ButtonComponent"
 import Input from "@ant-design/react-native/lib/input-item/Input";
@@ -12,18 +10,14 @@ import { useEffect } from "react";
 import { getAppointmentsForClient, archiveAppointment, searchAppointmentsForClient } from "@/actions/appointmentAction";
 import { setAppointment } from "@/slices/appointmentSlice";
 import { AppDispatch, RootState } from "@/stores/store";
-import NoAppointmentFound from "@/components/NoAppointmentFount";
-import LoadingAppointment from "@/components/AppointmentLoading";
+import NoResultFound from "@/components/NoResultFound";
+import LoadingAppointment from "@/components/LoadingData";
 
 
 export default function ClientAppointments() {
-    const router = useRouter()
-    const arr = [2,2,2,2,2,2,2,2,2,2,2,22,2,2]
     const windowHeight = Dimensions.get('window').height;
     const dispatch = useDispatch<AppDispatch>()
     const appointments = useSelector((state:RootState) => state.appointments.allAppoitment)
-    console.log(appointments)
-    console.log(useSelector((state:RootState) => state.appointments.archivedAppointments))
     const appointmentsCount = useSelector((state:RootState) => state.appointments.appointments).length 
  
     const [searchValue, setSearchvalue] = useState("")
@@ -79,7 +73,7 @@ export default function ClientAppointments() {
                 {/* Search bar */}
                 <View style={styles.search_bar_container}>
                     <Input
-                        style={[styles.label_font, styles.input_padding, styles.white_background, styles.full_width]}
+                        style={[styles.label_font, styles.input_padding, styles.white_background, styles.full_width, {opacity:0.5}]}
                         type={"text"}
                         value={searchValue}
                         onChangeText={setSearchvalue}
@@ -104,7 +98,7 @@ export default function ClientAppointments() {
                                         <LoadingAppointment />
                                     ) : 
                                     (appointmentsCount === 0) ? (
-                                        <NoAppointmentFound />
+                                        <NoResultFound text={"No appointment found..."} />
                                     ) : 
                                         appointments.map((elem, index) =>  <AppointmentList key={elem.id} data={
                                             {elem: elem, index:index}
@@ -122,7 +116,7 @@ export default function ClientAppointments() {
                                         <LoadingAppointment />
                                     ) : 
                                     (appointmentsCount === 0) ? (
-                                        <NoAppointmentFound />
+                                        <NoResultFound text={"No appointment found..."} />
                                     ) : 
                                         appointments.map((elem, index) => (!elem.isConfirmed && elem.isValid) && (<AppointmentList key={index} data={
                                             {elem: elem, index:index}
@@ -139,7 +133,7 @@ export default function ClientAppointments() {
                                         <LoadingAppointment />
                                     ) : 
                                     (appointmentsCount === 0) ? (
-                                        <NoAppointmentFound />
+                                        <NoResultFound text={"No appointment found..."} />
                                     ) : 
                                         appointments.map((elem, index) => (elem.isConfirmed) && (<AppointmentList key={index} data={
                                             {elem: elem, index:index}
@@ -157,7 +151,7 @@ export default function ClientAppointments() {
                                         <LoadingAppointment />
                                     ) : 
                                     (appointmentsCount === 0) ? (
-                                        <NoAppointmentFound />
+                                        <NoResultFound text={"No appointment found..."} />
                                     ) : 
                                         appointments.map((elem, index) => (!elem.isValid) && (<AppointmentList key={index} data={
                                             {elem: elem, index:index}
@@ -193,7 +187,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 6,
         shadowColor: "#d1d1d1",
-        shadowRadius: 20,
+        shadowRadius: 10,
     },
     full_width: {
         width: "80%"

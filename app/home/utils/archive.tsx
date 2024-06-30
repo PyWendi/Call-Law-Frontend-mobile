@@ -12,8 +12,8 @@ import { useEffect } from "react";
 import { getAppointmentsForClient, searchArchivedAppointmentsForClient } from "@/actions/appointmentAction";
 import { setAppointment } from "@/slices/appointmentSlice";
 import { AppDispatch, RootState } from "@/stores/store";
-import NoAppointmentFound from "@/components/NoAppointmentFount";
-import LoadingAppointment from "@/components/AppointmentLoading";
+import NoResultFound from "@/components/NoResultFound";
+import LoadingAppointment from "@/components/LoadingData";
 
 
 export default function ArchiveAppointments() {
@@ -76,7 +76,7 @@ export default function ArchiveAppointments() {
                 {/* Search bar */}
                 <View style={styles.search_bar_container}>
                     <Input
-                        style={[styles.label_font, styles.input_padding, styles.white_background, styles.full_width]}
+                        style={[styles.label_font, styles.input_padding, styles.white_background, styles.full_width, {opacity:0.5}]}
                         type={"text"}
                         value={searchValue}
                         onChangeText={setSearchvalue}
@@ -100,7 +100,7 @@ export default function ArchiveAppointments() {
                                         <LoadingAppointment />
                                     ) : 
                                     (appointmentsCount === 0) ? (
-                                        <NoAppointmentFound />
+                                        <NoResultFound />
                                     ) : 
                                         appointments.map((elem, index) => (elem.isArchived) && (<AppointmentList key={index} data={
                                             {elem: elem, index:index}
@@ -119,7 +119,7 @@ export default function ArchiveAppointments() {
                                     <LoadingAppointment />
                                 ) : 
                                 (appointmentsCount === 0) ? (
-                                    <NoAppointmentFound />
+                                    <NoResultFound text={"No appointment found..."} />
                                 ) : 
                                     appointments.map((elem, index) => (elem.isArchived) && (<AppointmentList key={index} data={
                                         {elem: elem, index:index}

@@ -22,11 +22,11 @@ export default function HomeScreen() {
     }
 
     function navigateToClientHome(){
-        router.navigate("/home/client/")
+        router.replace("/home/client/")
     }
 
     function navigateToLawyerHome(){
-        router.navigate("/home/lawyer/")
+        router.replace("/home/lawyer/")
     }
 
     async function checkAuth() {

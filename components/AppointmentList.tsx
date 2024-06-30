@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         borderRadius: 8,
         shadowColor: "#d1d1d1",
-        shadowRadius: 20,
+        shadowRadius: 10,
         fontFamily: "dm-sans"
     },
     divider: {

@@ -1,4 +1,4 @@
-import { View,Text, SafeAreaView } from "react-native"
+import { View,SafeAreaView } from "react-native"
 import { useRouter } from "expo-router"
 import { useEffect} from "react"
 import { checkAuthentitcation } from "@/actions/clientAction"
@@ -13,11 +13,11 @@ export default function SignClient() {
     const router = useRouter()
 
     function navigateToClientHome(){
-        router.navigate("/home/client/")
+        router.replace("/home/client/")
     }
 
     function navigateToLawyerHome(){
-        router.navigate("/home/lawyer/")
+        router.replace("/home/lawyer/")
     }
 
     async function checkAuth() {

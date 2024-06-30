@@ -1,7 +1,7 @@
 import { View, Text } from "react-native"
 import { ActivityIndicator } from "@ant-design/react-native"
 
-export default function LoadingAppointment() {
+export default function LoadingData() {
 
 
     return (

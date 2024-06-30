@@ -7,10 +7,7 @@ import CustomButtonWithIcon from "@/components/ButtonComponent"
 import CustomInputSimple from "../CustomWithoutLineComponent"
 import { login } from "@/actions/authSystemAction"
 
-
-import { AppDispatch, RootState } from "@/stores/store"
-import { useSelector, useDispatch } from "react-redux"
-import { setIsLoading, setRequestLoading, stopIsLoading } from "@/slices/interactionSlice"
+import { Toast } from "@ant-design/react-native"
 
 
 export default function LoginForm () {
@@ -21,10 +18,6 @@ export default function LoginForm () {
     const [password, setPassword] = useState("")
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [isPasswordValid, setIsPasswordValid] = useState(true);
-
-
-    // const dispatch = useDispatch<AppDispatch>()
-    // const loadingState = useSelector((state:RootState) => state.interactions)
 
     const validateEmail = (email:string) => {
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -64,7 +57,9 @@ export default function LoginForm () {
             if(response) {
                 setLoading(false)
                 clearInput()
-                router.navigate("/home/client/")
+                router.replace("/home/client/")
+            } else {
+                Toast.fail("Error when signin, please verify your credential...")
             }
         }
         setLoading(false)

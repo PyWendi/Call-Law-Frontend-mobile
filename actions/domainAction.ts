@@ -12,6 +12,7 @@ export const fetchAllDomain = async (): Promise<DomainData> => {
     try {
         const response = await api.get("domain/")
         if ( response.status === 200 ) {
+            console.log(response) 
             data.domains = response.data.results
             data.res = true
         }

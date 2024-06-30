@@ -14,6 +14,9 @@ import { LawyerSignInFormat } from "@/types/modelsType"
 import { fetchAllDomain } from "@/actions/domainAction"
 import { registerLawyer } from "@/actions/LawyerAction"
 
+import { useSelector, useDispatch } from "react-redux"
+import { AppDispatch, RootState } from "@/stores/store"
+
 
 
 const AgreeItem = Checkbox.AgreeItem
@@ -27,6 +30,7 @@ interface SelectFormat {
 export default function SignLawyerForm () {
 
     const router = useRouter()
+    const dispatch = useDispatch()
     const [modal, setModal] = useState(false)
     const [loading, setLoading] = useState(false)
     const [first_name, setFirstName] = useState("")
@@ -191,7 +195,7 @@ export default function SignLawyerForm () {
                 style={{
                     width: "75%",
                     position: "absolute",
-                    top: "40%",
+                    top: "35%",
                     left: "12%",
                     transform: [
                         { translateX: '50%' },

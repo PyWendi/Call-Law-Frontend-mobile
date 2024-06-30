@@ -1,6 +1,7 @@
 import { View, Text } from "react-native"
+import React from "react"
 
-export default function NoAppointmentFound() {
+const NoResultFound: React.FC<{text:string}> = ({text}) => {
 
 
     return (
@@ -20,8 +21,10 @@ export default function NoAppointmentFound() {
                 fontSize: 18,
                 color: "#6d6d6d"
             }}>
-                No appointment found...
+                {text}
             </Text>
         </View>
     )
 }
+
+export default NoResultFound

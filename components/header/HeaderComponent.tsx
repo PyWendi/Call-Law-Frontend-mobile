@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native"
+import { View, StyleSheet } from "react-native"
 import { FontAwesome } from "@expo/vector-icons"
 import LogoComponent from "../LogoHeaderComponent"
 import { useRouter } from "expo-router"
@@ -10,7 +10,7 @@ export default function HeaderComponent () {
     
     const handleLogout = async () => {
         await logout()
-        router.navigate("/")
+        router.replace("/")
     }
 
 
