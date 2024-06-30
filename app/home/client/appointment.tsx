@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { Tabs } from "@ant-design/react-native";
 import AppointmentList from "@/components/AppointmentList";
 import { useEffect } from "react";
-import { getAppointmentsForClient } from "@/actions/appointmentAction";
+import { getAppointmentsForClient, archiveAppointment, searchAppointmentsForClient } from "@/actions/appointmentAction";
 import { setAppointment } from "@/slices/appointmentSlice";
 import { AppDispatch, RootState } from "@/stores/store";
 import NoAppointmentFound from "@/components/NoAppointmentFount";
@@ -21,7 +21,10 @@ export default function ClientAppointments() {
     const arr = [2,2,2,2,2,2,2,2,2,2,2,22,2,2]
     const windowHeight = Dimensions.get('window').height;
     const dispatch = useDispatch<AppDispatch>()
-    const appointments = useSelector((state:RootState) => state.appointments.appointments)
+    const appointments = useSelector((state:RootState) => state.appointments.allAppoitment)
+    console.log(appointments)
+    console.log(useSelector((state:RootState) => state.appointments.archivedAppointments))
+    const appointmentsCount = useSelector((state:RootState) => state.appointments.appointments).length 
  
     const [searchValue, setSearchvalue] = useState("")
     const [loading, setLoading] = useState(false)
@@ -29,16 +32,17 @@ export default function ClientAppointments() {
         {title: "All"},
         {title: "Pending"},
         {title: "Confirmed"},
-        {title: "Canceled",}
+        {title: "Canceled"},
+        // {title: "Archived"}
     ]
     
     const handleSearch = () => {
-        setLoading(true)
-        console.log(windowHeight)
-        console.log(searchValue)
-        setTimeout(() => {
-            setLoading(false)
-        }, 4000)
+
+        if(searchValue === "") {
+            fetchAllAppointments()
+        } else {
+            searchAppointments(searchValue)
+        }
     }
 
     const fetchAllAppointments = async () => {
@@ -46,10 +50,19 @@ export default function ClientAppointments() {
         const response = await getAppointmentsForClient()
         if(response.res) {
             dispatch(setAppointment(response.appointments))
-            // appointments = useSelector
-            console.log(appointments)
         } else {
-            console.log(response)
+            dispatch(setAppointment([]))
+        }
+        setLoading(false)
+    }
+
+    const searchAppointments = async (search:string) => {
+        setLoading(true)
+        const response = await searchAppointmentsForClient(search)
+        if(response.res) {
+            dispatch(setAppointment(response.appointments))
+        } else {
+            dispatch(setAppointment([]))
         }
         setLoading(false)
     }
@@ -80,24 +93,20 @@ export default function ClientAppointments() {
                 <View>
                     <Tabs 
                     tabBarActiveTextColor="#108B54"
-                    style={{
-                        // height: 500
-                    }}
                     tabBarTextStyle={{fontFamily: "dm-sans", fontWeight: "500"}}
                     tabs={status}>
                         
                         <View style={{marginBottom: 20, 
-                            // height: (windowHeight-450)
                         }}>
                             <ScrollView style={{height: (windowHeight-310)}}>
                                 <View>
                                     {(loading) ? (
                                         <LoadingAppointment />
                                     ) : 
-                                    (appointments.length === 0) ? (
+                                    (appointmentsCount === 0) ? (
                                         <NoAppointmentFound />
                                     ) : 
-                                        appointments.map((elem, index) =>  <AppointmentList key={index} data={
+                                        appointments.map((elem, index) =>  <AppointmentList key={elem.id} data={
                                             {elem: elem, index:index}
                                         }/>)
                                     
@@ -112,7 +121,7 @@ export default function ClientAppointments() {
                                 {(loading) ? (
                                         <LoadingAppointment />
                                     ) : 
-                                    (appointments.length === 0) ? (
+                                    (appointmentsCount === 0) ? (
                                         <NoAppointmentFound />
                                     ) : 
                                         appointments.map((elem, index) => (!elem.isConfirmed && elem.isValid) && (<AppointmentList key={index} data={
@@ -129,7 +138,7 @@ export default function ClientAppointments() {
                                 {(loading) ? (
                                         <LoadingAppointment />
                                     ) : 
-                                    (appointments.length === 0) ? (
+                                    (appointmentsCount === 0) ? (
                                         <NoAppointmentFound />
                                     ) : 
                                         appointments.map((elem, index) => (elem.isConfirmed) && (<AppointmentList key={index} data={
@@ -140,23 +149,24 @@ export default function ClientAppointments() {
                                 </View>
                             </ScrollView>
                         </View>
+
                         <View style={{marginBottom: 20}}>
                             <ScrollView style={{height: (windowHeight-310)}}>
                                 <View>
                                 {(loading) ? (
                                         <LoadingAppointment />
                                     ) : 
-                                    (appointments.length === 0) ? (
+                                    (appointmentsCount === 0) ? (
                                         <NoAppointmentFound />
                                     ) : 
                                         appointments.map((elem, index) => (!elem.isValid) && (<AppointmentList key={index} data={
                                             {elem: elem, index:index}
-                                        }/>) )
-                                    
+                                    }/>) )
                                 }
                                 </View>
                             </ScrollView>
                         </View> 
+                        
                     </Tabs>
                     {/* Apppointment list */}
                 </View>

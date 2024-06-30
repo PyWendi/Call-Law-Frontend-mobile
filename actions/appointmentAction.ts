@@ -1,4 +1,8 @@
-import { AppointmentCreateFormat, AppointmentData, AppointmentLawyerValidationFormat, AppointmentMassData } from "@/types/modelsType";
+import { 
+    AppointmentCreateFormat, 
+    AppointmentData, 
+    AppointmentLawyerValidationFormat, 
+    AppointmentMassData } from "@/types/modelsType";
 import { api } from "./api";
 
 
@@ -12,6 +16,94 @@ export const getAppointmentsForClient = async ():Promise<AppointmentMassData> =>
     try {
         const response = await api.get("appointment/for/client")
         if(response.status === 200) {
+            data.appointments = response.data
+            data.res = true
+        }
+
+        return data
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+}
+
+
+export const getArchivedAppointmentsForClient = async ():Promise<AppointmentMassData> => {
+    let data: AppointmentMassData = {
+        appointments: [],
+        res: false
+    }
+
+
+    try {
+        const response = await api.get("appointment/archived/for/client")
+        if(response.status === 200) {
+            data.appointments = response.data
+            data.res = true
+        }
+
+        return data
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+}
+
+export const getSingleAppointmentsForClient = async (id:number):Promise<AppointmentData> => {
+    let data: AppointmentData = {
+        appointments: null,
+        res: false
+    }
+
+
+    try {
+        const response = await api.get(`appointment/${id}`)
+        if(response.status === 200) {
+            data.appointments = response.data
+            data.res = true
+        }
+
+        return data
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+}
+
+export const searchAppointmentsForClient = async (search:string):Promise<AppointmentMassData> => {
+    let data: AppointmentMassData = {
+        appointments: [],
+        res: false
+    }
+
+
+    try {
+        const response = await api.get(`appointment/search/${search}/`)
+        if(response.status === 200) {
+            data.appointments = response.data
+            data.res = true
+        }
+
+        return data
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+}
+
+
+
+export const searchArchivedAppointmentsForClient = async (search:string):Promise<AppointmentMassData> => {
+    let data: AppointmentMassData = {
+        appointments: [],
+        res: false
+    }
+
+
+    try {
+        const response = await api.get(`appointment/search/archive/${search}/`)
+        if(response.status === 200) {
+            console.log(response)
             data.appointments = response.data
             data.res = true
         }
@@ -51,7 +143,7 @@ export const validateAppointment = async (id:number, body:AppointmentLawyerValid
     }
 
     try {
-        const response = await api.put(`appointment/${id}/validate_appointment`, body)        
+        const response = await api.put(`appointment/${id}/validate_appointment/`, body)        
         if(response.status === 200) {
             data.appointments = response.data
             data.res = true

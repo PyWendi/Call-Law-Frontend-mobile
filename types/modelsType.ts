@@ -176,7 +176,7 @@ export interface NotificationReciever {
     id: number;
     first_name: string;
     last_name: string;
-    profile_img?: string | null;
+    profile_img: string | null;
 }
 
 export interface NotificationAppointment {

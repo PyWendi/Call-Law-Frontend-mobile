@@ -2,9 +2,17 @@ import { View, Text, StyleSheet } from "react-native"
 import { FontAwesome } from "@expo/vector-icons"
 import LogoComponent from "../LogoHeaderComponent"
 import { useRouter } from "expo-router"
+import { logout } from "@/actions/authSystemAction"
+
 
 export default function HeaderComponent () {
     const router = useRouter()
+    
+    const handleLogout = async () => {
+        await logout()
+        router.navigate("/")
+    }
+
 
     return (
         <>
@@ -58,7 +66,7 @@ export default function HeaderComponent () {
                                 size={22}
                                 color={"#108B54"}
                                 // name="ellipsis-v" onPress={() => router.back()} />
-                                name="bars" onPress={() => console.log("Menu pressed")} />
+                                name="bars" onPress={handleLogout} />
                         </View>
                         
                     </View>

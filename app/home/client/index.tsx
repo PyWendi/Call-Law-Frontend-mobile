@@ -6,16 +6,15 @@ import React from 'react';
 import MenuButton from "@/components/MenuButton";
 import { useEffect, useState } from "react";
 import { checkAuthentitcation } from "@/actions/clientAction";
+import { useDispatch, UseDispatch } from "react-redux";
+import { getAppointmentsForClient } from "@/actions/appointmentAction";
+import { setAppointment } from "@/slices/appointmentSlice";
 
 export default function ClientHome() {
     const router = useRouter()
-
+    const dispatch = useDispatch()
     const [profileRoute, setProfileRoute] = useState("")
-    // const [appointment, setAppointment] = useState("")
-    // const [appointment, setAppointment] = useState("")
-    // const [appointment, setAppointment] = useState("")
-    // const [appointment, setAppointment] = useState("")
-    // const [appointment, setAppointment] = useState("")
+    const [loading, setLoading] = useState(false)
 
 
     function navigateToClientHome(){
@@ -43,7 +42,20 @@ export default function ClientHome() {
         }
     }
 
+    const fetchAllAppointments = async () => {
+        setLoading(true)
+        const response = await getAppointmentsForClient()
+        // const response = await getArchivedAppointmentsForClient()
+        if(response.res) {
+            dispatch(setAppointment(response.appointments))
+        } else {
+            console.log(response)
+        }
+        setLoading(false)
+    }
+
     useEffect(() => {
+        fetchAllAppointments()
         checkAuth()
     }, [])
     

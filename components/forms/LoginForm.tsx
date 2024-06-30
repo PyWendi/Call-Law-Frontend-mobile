@@ -17,8 +17,8 @@ export default function LoginForm () {
 
     const router = useRouter()
     const [loading, setLoading] = useState(false)
-    const [email, setEmail] = useState("client@gmail.com")
-    const [password, setPassword] = useState("Darkness21")
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
     const [isValidEmail, setIsValidEmail] = useState(true);
     const [isPasswordValid, setIsPasswordValid] = useState(true);
 

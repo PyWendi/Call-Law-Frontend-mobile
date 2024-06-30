@@ -1,0 +1,134 @@
+import React from "react";
+import { View, Text, StyleSheet, Platform, Button, TextInput } from "react-native";
+import { AppointmentLawyerValidationFormat } from "@/types/modelsType";
+import { useState } from "react";
+// import { List, DatePicker } from "@ant-design/react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import DatePicker from "react-native-date-picker";
+import CustomButtonWithIcon from "../ButtonComponent";
+import CustomInputSimple from "../CustomWithoutLineComponent";
+
+
+interface DataTransfer {
+    dataTransfer: (data:AppointmentLawyerValidationFormat) => void;
+}
+
+const ValidationForm: React.FC<DataTransfer> = ({dataTransfer}) => {
+
+    // const [dateValidation, setDateValidation] = useState("--/--/--")
+    // const [message, setMessage] = useState("")
+
+    const [date, setDate] = useState(new Date());
+    const [show, setShow] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState("");
+
+    // const onChange = (event, selectedDate) => {
+    //     const currentDate = selectedDate || date;
+    //     setShow(true);
+    //     setDate(currentDate);
+    // };
+
+    // const showPicker = () => {
+    //     setShow(true);
+    // };
+    
+    // const dateString = date.toISOString();
+
+    return (
+        <View>
+            {/* Datetime picker */}
+            <View style={style.form_container}>
+                {/* <List>
+                    <DatePicker
+                    locale={{
+                        okText: "Validate",
+                        dismissText: "Dismiss",
+                    }}
+                        value={dateValidation}
+                        defaultValue={new Date()}
+                        minDate={new Date(2015, 7, 6)}
+                        maxDate={new Date(2026, 11, 3)}
+                        onChange={(date) => {
+                            if (date) {
+                                // Convert the Date object to a string in "YYYY-MM-DD" format
+                                setDateValidation(date.toISOString().split('T')[0]);
+                            } else {
+                                // Handle the case where no date is selected
+                                setDateValidation("--/--/--");
+                            }
+                        }}
+                        format="YYYY-MM-DD hh:mm:ss">
+                        <List.Item arrow="horizontal">Select Date</List.Item>
+                    </DatePicker>
+                </List> */}
+
+                {/* <Button title="Show date picker!" onPress={showPicker} />
+                    {show && (
+                        <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date}
+                        mode={"datetime"}
+                        display="default"
+                        onChange={onChange}
+                        />
+                    )} */}
+                {/* <Button title="Open" onPress={() => setShow(true)} /> */}
+                <View style={{
+                        marginBottom: 20,
+                        width: "90%",
+                        margin: "auto"
+                    }}>
+                    <CustomButtonWithIcon 
+                    type="outlined"
+                    buttonClicked={() => setShow(true)}
+                    icon="clock-o"
+                    text="Select the datetime"
+                    />
+                    <DatePicker
+                        modal
+                        open={show}
+                        date={date}
+                        onConfirm={(date) => {
+                            setShow(false)
+                            setDate(date)
+                            console.log(date)
+                        }}
+                        onCancel={() => {
+                            setShow(false)
+                        }}
+                    />
+                </View>
+
+                <View style={{
+                    marginHorizontal: 10,
+                }}>
+                    <CustomInputSimple 
+                    parentValue={message}
+                    setParenValue={setMessage}
+                    type="text"
+                    label="Leave a little message.(optional)"
+                    />
+                </View>
+
+                <View>
+                    <CustomButtonWithIcon  
+                    type="primary"
+                    icon="check"
+                    loading={loading}
+                    text="Validate the appointment"                    
+                    />
+                </View>
+
+            </View>
+        </View>
+    )
+}
+
+const style = StyleSheet.create({
+    form_container: {
+        marginBottom: 20 
+    }
+})
+
+export default ValidationForm

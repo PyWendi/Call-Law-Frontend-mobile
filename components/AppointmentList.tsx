@@ -7,6 +7,8 @@ import { CustomJwtPayload } from "@/types/customTokenType";
 import { decodedToken } from "@/stores/tokenManagement";
 import { useRouter } from "expo-router";
 import { parseISO, format, formatDistanceToNow } from "date-fns";
+import TagComponent from "./TagComponent";
+import ProfileImage from "./ListProfileImage";
 
 
 interface DataProps {
@@ -22,53 +24,8 @@ const AppointmentList:React.FC<DataProps> = ({data}) => {
     const router = useRouter()
     const [userIsClient, setUserIsClient] = useState(false)
 
-
-    let pendingData = (
-        <Text style={[styles.tag, styles.tag_pending]}>
-            Pending
-        </Text>
-    )
-
-    let confirmedData = (
-        <Text style={[styles.tag, styles.tag_confirmed]}>
-            Confirmed
-        </Text>
-    )
-
-    let canceledData = (
-        <Text style={[styles.tag, styles.tag_canceled]}>
-            Canceled
-        </Text>
-    )
-
-    let archivedData = (
-        <Text style={[styles.tag, styles.tag_archived]}>
-            Archived
-        </Text>
-    )
-
     const formatedDate = format(parseISO(data.elem.date), 'dd/MM/yyyy HH:mm')
     const formatCreatedDate = formatDistanceToNow(parseISO(data.elem.created_at))
-
-    let tagContent = null
-
-    if(data.elem.isArchived){
-        tagContent = archivedData
-        console.log("archiveData")
-    } else if (!data.elem.isValid ) {
-        tagContent = canceledData
-        console.log("cancelData")
-    } else if(data.elem.isValid){
-        if(data.elem.isConfirmed){
-            tagContent = confirmedData
-            console.log("confirmedData")
-        } else {
-            tagContent = pendingData
-            console.log("pendingData")
-        }
-    }        
-
-
     
     async function defineUserIsClient (): Promise<boolean> {
         const tokenData:CustomJwtPayload | null = await decodedToken()
@@ -82,65 +39,30 @@ const AppointmentList:React.FC<DataProps> = ({data}) => {
 
     async function setuser() {
         setUserIsClient(await defineUserIsClient())
+    }
 
+    const handleTouchableOpacityPress = () => {
+        router.navigate({
+            pathname: "/home/appointments/[index]",
+            params: {index: data.index}
+        })
     }
     
     useEffect(() => {
         setuser()
-
-        console.log(userIsClient)
-        console.log(data.elem)
     }, [data.elem])
 
     return (
         <>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={handleTouchableOpacityPress}>
                 <View style={styles.container}>
                     <View style={styles.divider}>
-                        <View style={{width: "30%"}}>
-                            {(userIsClient)? 
-                                (data.elem.lawyer.profile_img == null) ? (
-                                    <View style={{
-                                        flex: 1,
-                                        margin: "auto"
-                                    }}>
-                                        <FontAwesome 
-                                        name="user-circle-o"
-                                        color={"grey"}
-                                        size={70}
-                                        style={{paddingRight: 10}}
-                                        />
-                                    </View>
-                                ) : (
-                                    <Image 
-                                    style={{width:90, height:90, borderRadius: 10}}
-                                    source={{
-                                        // uri: "http://127.0.0.1:78000"+data.elem.lawyer.profile_img
-                                        uri: "http://127.0.0.1:8000"+data.elem.lawyer.profile_img
-                                    }} />
-                                ) 
+                        <View style={{width: "30%", marginRight: 10}}>
+                            {(userIsClient)?
+                                <ProfileImage profile_link={data.elem.lawyer.profile_img} />
                                 :   
-                                (data.elem.client.profile_img == null) ? (
-                                    <View style={{
-                                        flex: 1,
-                                        margin: "auto"
-                                    }}>
-                                        <FontAwesome 
-                                        name="user-circle-o"
-                                        color={"grey"}
-                                        size={70}
-                                        style={{paddingRight: 10}}
-                                        />
-                                    </View>
-                                ) : (
-                                    <Image 
-                                        style={{width:90, height:90, borderRadius: 10}}
-                                        source={{
-                                            uri: "http://127.0.0.1:8000"+data.elem.client.profile_img
-                                        }} />
-                                )
+                                <ProfileImage profile_link={data.elem.client.profile_img} />
                             }
-                            
                         </View>
                         <View style={[styles.info_part]}>
                             {/* Title part */}
@@ -211,7 +133,11 @@ const AppointmentList:React.FC<DataProps> = ({data}) => {
                                     justifyContent: "space-between"
                                 }}>
                                     <View style={{width:"50%"}}>
-                                        {(tagContent)}
+                                    <TagComponent 
+                                    isArchived={data.elem.isArchived}
+                                    isConfirmed={data.elem.isConfirmed}
+                                    isValid={data.elem.isValid}
+                                    />
                                     </View>
                                     <Text style={{color: "#33863a", width: "50%", textAlign: "right"}}>{formatCreatedDate} ago</Text>
                                 </View>
@@ -258,31 +184,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginBottom:5,
     },
-    tag: {
-        width: "70%",
-        fontSize:13,
-        paddingHorizontal: 5,
-        paddingVertical:4,
-        borderWidth: 1,
-        textAlign: "center",
-        borderRadius:6
-    },
-    tag_pending: {
-        color: "grey",
-        borderColor: "grey",
-    },
-    tag_confirmed: {
-        color: "#0D6F45",
-        borderColor: "#0D6F45",
-    },
-    tag_canceled: {
-        color: "#A03535",
-        borderColor: "#A03535",
-    },
-    tag_archived: {
-        color: "#1D6787",
-        borderColor: "#1D6787",
-    }
 })
 
 export default AppointmentList

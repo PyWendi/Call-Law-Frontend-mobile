@@ -9,8 +9,7 @@ export default function RootLayout() {
   return (
     
     <Stack screenOptions={{
-      headerShown: false,
-      contentStyle: {backgroundColor: "white"},
+      headerShown: true,
       header(props) {
         return (<HeaderComponent/>)
       },
@@ -19,6 +18,7 @@ export default function RootLayout() {
       <Stack.Screen name="client" options={{ headerShown: true }} />
       <Stack.Screen name="profile" options={{ headerShown: true }} />
       <Stack.Screen name="utils" options={{ headerShown: true }} />
+      <Stack.Screen name="appointments" options={{ headerShown: true }} />
     </Stack>
   );
 }

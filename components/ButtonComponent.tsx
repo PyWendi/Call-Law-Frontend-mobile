@@ -9,8 +9,9 @@ interface ButtonPropsType {
     type: "primary" | "primary-low" | "outlined" | "outlined_danger" | "warning" | "search";
     buttonClicked?: () => void;
     loading?: boolean;
+    disabled?: boolean
 }
-const CustomButtonWithIcon:React.FC<ButtonPropsType> = ({text, loading, icon, type, buttonClicked}) => {
+const CustomButtonWithIcon:React.FC<ButtonPropsType> = ({text, loading, icon, type, buttonClicked, disabled}) => {
 
     let buttonType = type;
     
@@ -56,14 +57,25 @@ const CustomButtonWithIcon:React.FC<ButtonPropsType> = ({text, loading, icon, ty
             break;
             
         case "outlined_danger":
-            content = (
+            content = (!disabled) ?
+            (
                 <View>
                     <TouchableOpacity style={styles.max_width} onPress={() => buttonClicked && buttonClicked()}>
-                        <View style={styles.outlined_anger}>
+                        <View style={[styles.outlined_anger, styles.outlined_danger_enable]}>
                             {(icon) && (<FontAwesome size={28} name={icon} color={"#D45F5F"}/>)}
-                            {(loading) ? (<ActivityIndicator/>) : (<Text style={styles.text_outlined}>{ text }</Text>)}
+                            {(loading) ? (<ActivityIndicator/>) : (<Text style={styles.text_outlined_danger}>{ text }</Text>)}
                         </View>
                     </TouchableOpacity>
+                </View>
+            ) : 
+            (
+                <View>
+                    <View style={styles.max_width}>
+                        <View style={[styles.outlined_anger, styles.outline_danger_disable]}>
+                            {(icon) && (<FontAwesome size={28} name={icon} color={"#D45F5F"}/>)}
+                            {(loading) ? (<ActivityIndicator/>) : (<Text style={styles.text_outlined_danger}>{text}</Text>)}
+                        </View>
+                    </View>
                 </View>
             )
             break;
@@ -84,7 +96,7 @@ const CustomButtonWithIcon:React.FC<ButtonPropsType> = ({text, loading, icon, ty
         case "primary-low":
             content = (
                 <View>
-                    <TouchableOpacity style={[styles.primary_low, styles.max_width]} onPress={() => buttonClicked && buttonClicked()}>
+                    <TouchableOpacity style={[ styles.max_width]} onPress={() => buttonClicked && buttonClicked()}>
                         <View style={styles.primary_low}>
                             {(icon) && (<FontAwesome size={28} name={icon} color={"#ffffff"}/>)}
                             {(loading) ? (<ActivityIndicator/>) : (<Text style={styles.text}>{ text }</Text>)}
@@ -138,18 +150,24 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         borderRadius: 5,
       },
-      outlined_anger: {
+    outlined_anger: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: "center",
-        backgroundColor: '#ffffff',
         borderWidth: 2,
-        borderColor: "#D45F5F",
         alignContent: "center",
         paddingHorizontal: 10,
         paddingVertical: 6,
         borderRadius: 5,
-      },
+    },
+    outlined_danger_enable: {
+        backgroundColor: '#ffffff',
+        borderColor: "#D45F5F",
+    },
+    outline_danger_disable: {
+        borderColor: "#EA9F9F",
+        backgroundColor: '#e7e7e7',
+    },
     warning: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -166,6 +184,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#2281A7',
         padding: 10,
         borderRadius: 5,
+        marginTop: 10,
     },
 
     max_width: {
@@ -174,9 +193,15 @@ const styles = StyleSheet.create({
       
     text: {
         paddingHorizontal: 6,
-        color: "white"
+        color: "white",
+        fontFamily: "dm-sans"
     },
     text_outlined: {
+        color: "#108B54",
+        paddingHorizontal: 6,
+        fontWeight: '500'
+    },
+    text_danger: {
         color: "#108B54",
         paddingHorizontal: 6,
         fontWeight: '500'
