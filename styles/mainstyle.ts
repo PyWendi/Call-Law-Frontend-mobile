@@ -61,7 +61,7 @@ export const styles = StyleSheet.create({
 	// },
 	waveTop: {
 		position: 'absolute',
-		top: -130,
+		top: -140,
 		left: 0,
 		right: 0,
 		overflow: "hidden",
@@ -71,7 +71,7 @@ export const styles = StyleSheet.create({
 	},
 	waveBottom: {
 		position: 'absolute',
-		bottom: -130,
+		bottom: -140,
 		left: 0,
 		padding: 0,
 		margin:0,

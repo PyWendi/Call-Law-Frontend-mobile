@@ -90,7 +90,7 @@ export default function ClientSearch() {
                                     <NoResultFound text={"No lawyers found..."} />
                                 ) : 
                                     lawyers.map((elem, index) =>  
-                                    <LawyerList key={index} data={
+                                    <LawyerList key={elem.id} data={
                                         {lawyers: elem, index:index}
                                     }/>
                                 )

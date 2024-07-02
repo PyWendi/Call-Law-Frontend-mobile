@@ -7,7 +7,7 @@ export default function ProfileLayout() {
     <Stack screenOptions={{
       headerShown: false
     }}>
-      <Stack.Screen name="client" options={{ headerShown: false }} />
+      <Stack.Screen name="client" options={{ headerShown: false, contentStyle: {backgroundColor: "white"} }} />
       <Stack.Screen name="lawyer" options={{ headerShown: false }} />
     </Stack>
   );

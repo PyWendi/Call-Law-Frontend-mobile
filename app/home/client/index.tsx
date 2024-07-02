@@ -1,14 +1,21 @@
 import { useRouter } from "expo-router";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { CustomJwtPayload } from "@/types/customTokenType";
-import { decodedToken } from "@/stores/tokenManagement";
 import React from 'react';
 import MenuButton from "@/components/MenuButton";
 import { useEffect, useState } from "react";
+
+import { decodedToken } from "@/stores/tokenManagement";
 import { checkAuthentitcation } from "@/actions/clientAction";
+
 import { useDispatch, UseDispatch } from "react-redux";
 import { getAppointmentsForClient } from "@/actions/appointmentAction";
 import { setAppointment } from "@/slices/appointmentSlice";
+
+import { fetchClientProfile } from "@/actions/clientAction";
+import { fetchSingleLawyer } from "@/actions/LawyerAction";
+import { setClientProfile } from "@/slices/clientProfileSlice";
+import { setLawyerProfile } from "@/slices/lawyerProfileSlice";
 
 export default function ClientHome() {
     const router = useRouter()
@@ -54,7 +61,32 @@ export default function ClientHome() {
         setLoading(false)
     }
 
+    const setProfile = async () => {
+        const decodedData:CustomJwtPayload | null = await decodedToken()
+
+        if(decodedData){
+            if(decodedData.isClient){
+                // If the current user is a client
+                const response = await fetchClientProfile(decodedData.user_id)
+                if(response.res){
+                    if(response.client != null) dispatch(setClientProfile(response.client))
+                } else router.replace("/")
+
+            } else {
+                // If the current user is a lawyer
+                const response = await fetchSingleLawyer(decodedData.user_id)
+                if(response.res){
+                    if(response.lawyer != null) dispatch(setLawyerProfile(response.lawyer))
+                } else router.replace("/")
+
+            }
+        } else {
+            router.replace("/")
+        }
+    }
+
     useEffect(() => {
+        setProfile()
         fetchAllAppointments()
         checkAuth()
     }, [])

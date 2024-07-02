@@ -16,6 +16,7 @@ import LoadingAppointment from "@/components/LoadingData";
 
 export default function ClientAppointments() {
     const windowHeight = Dimensions.get('window').height;
+    const arr = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
     const dispatch = useDispatch<AppDispatch>()
     const appointments = useSelector((state:RootState) => state.appointments.allAppoitment)
     const appointmentsCount = useSelector((state:RootState) => state.appointments.appointments).length 
@@ -157,6 +158,9 @@ export default function ClientAppointments() {
                                             {elem: elem, index:index}
                                     }/>) )
                                 }
+                                {/* {arr.map((elem, index) => (
+                                    <LoadingAppointment key={index}/>
+                                ))} */}
                                 </View>
                             </ScrollView>
                         </View> 

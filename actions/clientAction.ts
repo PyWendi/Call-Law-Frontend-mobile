@@ -53,7 +53,6 @@ export const fetchClientProfile = async (id:number): Promise<ClientProfileData> 
         const response = await api.get(`client/${id}/`)
 
         if (response.status === 200) {
-            console.log(response.data)
             data.client = response.data
             data.res = true
         }
@@ -63,7 +62,7 @@ export const fetchClientProfile = async (id:number): Promise<ClientProfileData> 
         console.log(error)
         return data
     }
-} 
+}  
 
 
 export const updateClientProfile = async (id:number, body:ClientUpdateFormat): Promise<ClientProfileData> => {
@@ -87,14 +86,27 @@ export const updateClientProfile = async (id:number, body:ClientUpdateFormat): P
 }
 
 
-export const upload_profile_image = async (id:number, body:ProfileImage): Promise<ProfileImageData> => {
+export const upload_profile_image = async (id:number, uri:string, fileName:string): Promise<ProfileImageData> => {
     let data: ProfileImageData = {
         profile_img: "",
         res: false
     }
+    console.log(uri)
+    console.log(fileName)
 
+    const formData = new FormData()
+    formData.append("profile_img", {
+        uri: uri,
+        // type: "image/jpeg",
+        // name: fileName
+    })
+    console.log(formData)
     try {
-        const response = await api.put(`client/${id}/update_profile_image/`, body)
+        const response = await api.put(`client/${id}/update_profile_image/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
         console.log(response)
         if (response.status === 200) {
             data.profile_img = response.data.profile_img

@@ -22,7 +22,7 @@ const LawyerList:React.FC<DataProps> = ({data}) => {
     const handleTouchableOpacityPress = () => {
         router.navigate({
             pathname: "/home/profile/[id]",
-            params: {id: 10}
+            params: {id: data.index} 
         })
     }
 

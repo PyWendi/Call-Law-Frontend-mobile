@@ -112,7 +112,7 @@ export default function ArchiveAppointments() {
                         </View>   */}
                     </Tabs>
                     {/* Apppointment list */}
-                    <View style={{marginBottom: 20}}>
+                    <View style={{marginBottom: 20, height: windowHeight-250}}>
                         <ScrollView>
                             <View>
                             {(loading) ? (
@@ -124,8 +124,12 @@ export default function ArchiveAppointments() {
                                     appointments.map((elem, index) => (elem.isArchived) && (<AppointmentList key={index} data={
                                         {elem: elem, index:index}
                                 }/>) )
-                                
                             }
+
+                            {/* {arr.map((elem, index) => (
+                                <LoadingAppointment key={index}/>
+                            ))} */}
+                                
                             </View>
                         </ScrollView>
                     </View> 
