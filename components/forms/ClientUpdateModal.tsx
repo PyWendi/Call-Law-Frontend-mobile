@@ -1,18 +1,25 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, ToastAndroid } from "react-native";
 import { styles } from "@/styles/mainstyle";
-import { Picker, Toast } from "@ant-design/react-native"
+import { Picker, Toast, Modal, Checkbox, List } from "@ant-design/react-native"
 import type { PickerValue, PickerValueExtend } from "@ant-design/react-native"
 import CustomInputSimple from "../CustomWithoutLineComponent";
 import CustomButtonWithIcon from "../ButtonComponent";
 import { getRegion } from "@/actions/RegionAction"
-import { ClientUpdateFormat, Client } from "@/types/modelsType";
+import { ClientUpdateFormat, Client, LawyerUpdate } from "@/types/modelsType";
 import { ImagePickerSuccessResult } from "expo-image-picker";
 import { updateClientProfile, upload_profile_image } from "@/actions/clientAction";
+import { updateLawyer } from "@/actions/LawyerAction";
 import { useState, useEffect } from "react";
 import * as FileSystem from "expo-file-system"
 import * as ImagePicker from "expo-image-picker"
+import { fetchAllDomain } from "@/actions/domainAction";
+import { decodedToken } from "@/stores/tokenManagement";
+import { CustomJwtPayload } from "@/types/customTokenType";
+// import CheckboxItem from "@ant-design/react-native/lib/checkbox/CheckboxItem";
 
+
+const CheckboxItem = Checkbox.CheckboxItem
 
 interface SelectFormat {
     label: string;
@@ -20,13 +27,13 @@ interface SelectFormat {
 }
 
 interface PropsFormat {
-    client: Client;
+    client: Client | null;
     callback: () => void;
     // callback: (data:ClientUpdateFormat) => void;
 }
 
 const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
-
+    
     const [first_name, setFirstName] = useState(client.first_name)
     const [last_name, setLastName] = useState(client.last_name)
     const [phone, setPhone] = useState(client.phone)
@@ -38,12 +45,23 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
     const [loading, setLoading] = useState(false)
     const [image, setImage] = useState("")
     const [selectedImage, setSelectedImage] = useState<ImagePickerSuccessResult | null>(null)
+    const [modal, setModal] = useState(false)
+    const [domains, setDomain] = useState<SelectFormat[] | []>([])
+    const [domainDataChecked, setDomainDataChecked] = useState([])
+
+    const [isClient, setisClient] = useState(false)
     
+
+    const clientSetter = async () => {
+        const token: CustomJwtPayload | null = await decodedToken()
+        if(token){
+            (token.isClient) ? setisClient(true) : setisClient(false)
+        }
+    }
 
     const openSelect = () => {
         setVisible(true)
     }
-
 
      
     const handleRegionChange = (value:any) => {
@@ -75,6 +93,21 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
             setRegion(data[0].value)
             setRegionDesign(data[0].label)
             setRegionData(data)
+        }
+    }
+
+    async function getDomainData () {
+        const response = await fetchAllDomain()
+        if (response.res) {
+            console.log(response.domains)
+            let data: SelectFormat[] = []
+            response.domains.map((elem) => [
+                data.push({
+                    label: elem.name,
+                    value: elem.id
+                })
+            ])
+            setDomain(data)
         }
     }
 
@@ -138,35 +171,113 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
     }
 
     const handleUpdate = async () => {
-        const data:ClientUpdateFormat = {
-            first_name: first_name,
-            last_name: last_name,
-            location: location,
-            phone: phone,
-            region: region
+
+        let response = null
+        if(isClient){
+            let data: ClientUpdateFormat = {
+                first_name: first_name,
+                last_name: last_name,
+                location: location,
+                phone: phone,
+                region: region
+            }
+            response = await updateClientProfile(client.id, data)    
+        } else {
+            let data: LawyerUpdate = {
+                first_name: first_name,
+                last_name: last_name,
+                location: location,
+                phone: phone,
+                region: region,
+                domains: domainDataChecked
+            }
+            response = await updateLawyer(client.id, data)
         }
 
-        const response = await updateClientProfile(client.id, data)
         if(response.res){
             if(selectedImage){
                 const image_uploaded = await uploadImage()
                 if(!image_uploaded) return ;
             }
 
-            Toast.success('Your profile has been successfully edited.', 2)
+            Toast.success('Your personal information has been successfully edited.', 2)
             callback()
         } else {
-            Toast.fail("An error occured when performing edict action, please retry gain and check your connectivity.")
+            Toast.fail("An error occured when performing edict action, please retry again and check your connectivity.")
         }
     }    
 
     useEffect(() => {
         // ToastAndroid.show("Hello world", ToastAndroid.SHORT)
+        clientSetter()
         getRegionData()
+        getDomainData()
     },[]) 
 
     return (
         <View>
+
+            <Modal
+                style={{
+                    width: "75%",
+                    position: "absolute",
+                    top: 220,
+                    left: "12%",
+                    backgroundColor: "white",
+                    // transform: [
+                    //     { translateX: '50%' },
+                    //     { translateY: '50%' }
+                    // ],
+                    borderRadius: 6
+                }}
+                visible={modal}
+                onClose={() => setModal(false)}>
+                <View style={{ paddingVertical: 20, paddingHorizontal: 20 }}>
+                    <View>
+                        <Text style={[styles.color_green, {
+                            fontSize: 20,
+                            textAlign:"center",
+                            paddingBottom: 10
+                        }]}>
+                            Choose your domains
+                        </Text>
+                    </View>
+
+                    <View>
+                        <List renderHeader="Domain Text">
+                            {domains.map(domain => (
+                                <CheckboxItem
+                                    key={domain.value}
+                                    onChange={(event) => {
+                                        const isSelected = domainDataChecked.includes(domain.value);
+                                        let updatedDomains: any;
+                                        if (isSelected) {
+                                            // If the domain is already selected, filter it out (remove)
+                                            updatedDomains = domainDataChecked.filter((selectedDomain) => selectedDomain!== domain.value);
+                                        } else {
+                                            // If not selected, add it to the array
+                                            updatedDomains = [...domainDataChecked, domain.value];
+                                        }
+                                        console.log(updatedDomains)
+                                        setDomainDataChecked(updatedDomains); // Update state with the new selection array
+                                    }}>
+                                    {domain.label}
+                                </CheckboxItem>
+                            ))}
+                        </List>
+                    </View>
+
+                    <CustomButtonWithIcon 
+                    loading={false}
+                    text="Close modal"
+                    type="warning"
+                    buttonClicked={() => setModal(false)}
+                    />
+                </View>
+            </Modal>
+
+
+
             <View>
                 <Text style={[styles.color_green, {
                     fontSize: 20,
@@ -262,6 +373,16 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
                 </Picker>
 
             </View>
+
+            {(!isClient) &&(
+                <View style={{paddingBottom: 10, width:"90%", margin:"auto"}}>
+                    <CustomButtonWithIcon 
+                    text={"Select your domains"}
+                    type="outlined"
+                    buttonClicked={() => setModal(true)}
+                    />
+                </View>
+                )}
 
             <View style={{paddingBottom: 10, width:"90%", margin:"auto"}}>
                 <CustomButtonWithIcon

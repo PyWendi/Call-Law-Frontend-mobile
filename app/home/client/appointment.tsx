@@ -59,7 +59,7 @@ export default function ClientAppointments() {
         } else {
             dispatch(setAppointment([]))
         }
-        setLoading(false)
+        setLoading(false) 
     }
 
 

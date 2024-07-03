@@ -29,7 +29,8 @@ export default function LawyerLayout() {
     <Tabs screenOptions={{
 		tabBarActiveTintColor: "#dac518",
 		tabBarInactiveTintColor: "#6d6d6d" ,
-		tabBarLabel: ""
+		tabBarLabel: "",
+		headerShown: false
       }}>
 		{routeData.map((route) => (
 			<Tabs.Screen 

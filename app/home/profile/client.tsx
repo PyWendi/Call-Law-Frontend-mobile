@@ -68,7 +68,7 @@ export default function ClientProfile() {
                 width: "75%",
                 position: "absolute",
                 // top: "100%",
-                top: 200,
+                top: 150,
                 left: "12%",
                 borderRadius: 6,
                 backgroundColor: "white"

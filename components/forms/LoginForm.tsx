@@ -7,6 +7,9 @@ import CustomButtonWithIcon from "@/components/ButtonComponent"
 import CustomInputSimple from "../CustomWithoutLineComponent"
 import { login } from "@/actions/authSystemAction"
 
+import { CustomJwtPayload } from "@/types/customTokenType"
+import { decodedToken } from "@/stores/tokenManagement"
+
 import { Toast } from "@ant-design/react-native"
 
 
@@ -56,8 +59,16 @@ export default function LoginForm () {
             
             if(response) {
                 setLoading(false)
+
+                const token:CustomJwtPayload | null = await decodedToken()
                 clearInput()
-                router.replace("/home/client/")
+                if(token) {
+                    if(token.isClient){
+                        router.replace("/home/client/")
+                    } else {
+                        router.replace("/home/lawyer/")
+                    }
+                }
             } else {
                 Toast.fail("Error when signin, please verify your credential...")
             }

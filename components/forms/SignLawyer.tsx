@@ -41,12 +41,7 @@ export default function SignLawyerForm () {
     const [region, setRegion] = useState<any>()
     const [regionDesign, setRegionDesign] = useState("")
     const [regionData, setRegionData] = useState<SelectFormat[] | []>([])
-    const [domains, setDomain] = useState<SelectFormat[] | []>([
-        {label: "D1", value: 1},
-        {label: "D2", value: 2},
-        {label: "D3", value: 3},
-        {label: "D4", value: 4},
-    ])
+    const [domains, setDomain] = useState<SelectFormat[] | []>([])
     const [domainDataChecked, setDomainDataChecked] = useState([])
     const [password, setPassword] = useState("")
     const [password1, setPassword1] = useState("")

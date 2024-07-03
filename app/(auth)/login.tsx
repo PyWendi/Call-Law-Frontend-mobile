@@ -14,11 +14,11 @@ export default function Login() {
     const router = useRouter()
 
     function navigateToClientHome(){
-        router.navigate("/home/client/")
+        router.replace("/home/client/")
     }
 
     function navigateToLawyerHome(){
-        router.navigate("/home/lawyer/")
+        router.replace("/home/lawyer/")
     }
 
     async function checkAuth() {
@@ -28,8 +28,10 @@ export default function Login() {
             
             if (decodedData) {
                 if(decodedData.isClient) {
+                    console.log("Navigate to client")
                     navigateToClientHome()
                 } else {
+                    console.log("Navigate to lawyer")
                     navigateToLawyerHome()
                 }
             }

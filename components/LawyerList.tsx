@@ -94,8 +94,8 @@ const LawyerList:React.FC<DataProps> = ({data}) => {
                         }}>
                             {(data.lawyers.domains.length != 0)?
                             
-                                data.lawyers.domains.map((domain) => (
-                                    <DomainTag domainName={domain.name} />
+                                data.lawyers.domains.map((domain, index) => (
+                                    <DomainTag key={index} domainName={domain.name} />
                                 )
                             )
                             : 

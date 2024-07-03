@@ -12,13 +12,13 @@ export default function LogoComponent() {
 const styles = StyleSheet.create({
     mexicanHeaderFont: {
 		fontFamily: "mexican-font",
-		width: "100%",
+		width: "90%",
 		backgroundColor: "white",
-		fontSize: 20,
+		fontSize: 17,
 		fontWeight: "600"
 	},
     headerPaddingStart:{
-		paddingStart: 10
+		paddingStart: 7
 	},
     color_yellow: {
 		color: "#D8D51A",

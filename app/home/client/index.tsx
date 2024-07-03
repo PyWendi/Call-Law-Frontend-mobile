@@ -24,14 +24,6 @@ export default function ClientHome() {
     const [loading, setLoading] = useState(false)
 
 
-    function navigateToClientHome(){
-        router.navigate("/home/client/")
-    }
-
-    function navigateToLawyerHome(){
-        router.navigate("/home/lawyer/")
-    }
-
     async function checkAuth() {
         const response = await checkAuthentitcation()
         if (response){
