@@ -23,14 +23,15 @@ export const getExperiences = async (id:number): Promise<ExperienceData> => {
     }
 }
 
-export const createExperience = async (): Promise<ExperienceCreationData> => {
+export const createExperience = async (body: ExperienceUpdateDataFormat): Promise<ExperienceCreationData> => {
     let data: ExperienceCreationData = {
         experience: null,
         res: false
     }
+    console.log(body)
 
     try {
-        const response = await api.post("experience/")   
+        const response = await api.post(`experience/`, body)   
         if (response.status === 201) {
             data.experience = response.data
             data.res = true

@@ -59,7 +59,7 @@ const PersonalInformation:React.FC<PersonalInformationProps> = ({data, trigger})
     return (
         <>
             {/* General information */}
-            <View style={[styles.infomration_container, styles.elevate]}>
+            <View>
                 <View>
                     {/* SectionTitle */}
                     <Text style={styles.section_title}>

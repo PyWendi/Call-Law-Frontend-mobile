@@ -156,14 +156,18 @@ export const upload_profile_image = async (id:number, body:ProfileImage): Promis
 }
 
 
-export const update_availability = async (id:number, body:Availability): Promise<AvailabilityData> => {
+export const update_availability = async (body:Availability): Promise<AvailabilityData> => {
     let data: AvailabilityData = {
         availability: "",
         res: false
     }
 
     try {
-        const response = await api.put(`lawyer/${id}/update_profile_image/`, body)
+        const response = await api.put(`lawyer/update_profile_image/`, body, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
         console.log(response)
         if (response.status === 200) {
             data.availability = response.data.availability

@@ -7,7 +7,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import CustomButtonWithIcon from "../../../components/ButtonComponent";
 import UserProfileImage from "@/components/ProfileImage";
 import PersonalInformation from "@/components/profile/PersonalInformation";
-// import ListDomainTag from "@/components/ListDomainTag";
+import ProfesionalInformation from "@/components/profile/ProfesionalInformation";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/stores/store";
@@ -52,6 +52,7 @@ export default function LawyerProfile() {
             const response  = await fetchSingleLawyer(profile.id)
             if(response.res){
                 if(response.lawyer != null) {
+                    console.log(response.lawyer)
                     dispatch(setLawyerProfile(response.lawyer))
                 }
             }
@@ -141,17 +142,40 @@ export default function LawyerProfile() {
                 {
                     (profile != null)? 
                     (
-                        <PersonalInformation  
-                        data={{
-                            id: profile.id,
-                            domains: profile.domains,
-                            email: profile.email,
-                            location: profile.location,
-                            phone: profile.phone,
-                            region: profile.region.designation
-                        }}
-                        trigger={handleTrigger}
+                        <View style={[styles.infomration_container, styles.elevate]}>
+                            <PersonalInformation  
+                            data={{
+                                id: profile.id,
+                                domains: profile.domains,
+                                email: profile.email,
+                                location: profile.location,
+                                phone: profile.phone,
+                                region: profile.region.designation
+                            }}
+                            trigger={handleTrigger}
+                            />
+                        </View>
+
+                    ) : 
+                    (
+                        <NoResultFound 
+                        text="Any information found, 
+                        please go to the landing page and sign in again..."
                         />
+                    )
+                }
+
+
+                {/* General Availabilities, experiences, notices */}
+                {
+                    (profile != null)? 
+                    (
+                        <View style={[styles.infomration_container, styles.elevate]}>
+                            <ProfesionalInformation 
+                            id={profile.id}
+                            availability={""}
+                            />
+                        </View>
 
                     ) : 
                     (
@@ -165,19 +189,10 @@ export default function LawyerProfile() {
                 
 
 
-                {/* Action like update */}
+
+                {/* Action button to go home */}
                 <View style={[styles.infomration_container, styles.elevate]}>
                     <View>
-                        {/* <View style={{paddingBottom: 10}}>
-                            <CustomButtonWithIcon 
-                            type="outlined"
-                            icon="edit"
-                            loading={false}
-                            text="EDIT YOUR PROFILE"
-                            buttonClicked={() => setModal(true)}
-                            />
-                        </View> */}
-
                         <CustomButtonWithIcon 
                         type="primary"
                         buttonClicked={redirectToHome}

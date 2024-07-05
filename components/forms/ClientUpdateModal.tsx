@@ -6,7 +6,7 @@ import type { PickerValue, PickerValueExtend } from "@ant-design/react-native"
 import CustomInputSimple from "../CustomWithoutLineComponent";
 import CustomButtonWithIcon from "../ButtonComponent";
 import { getRegion } from "@/actions/RegionAction"
-import { ClientUpdateFormat, Client, LawyerUpdate } from "@/types/modelsType";
+import { ClientUpdateFormat, Client, LawyerUpdate, Lawyer } from "@/types/modelsType";
 import { ImagePickerSuccessResult } from "expo-image-picker";
 import { updateClientProfile, upload_profile_image } from "@/actions/clientAction";
 import { updateLawyer } from "@/actions/LawyerAction";
@@ -27,7 +27,7 @@ interface SelectFormat {
 }
 
 interface PropsFormat {
-    client: Client | null;
+    client: Client | Lawyer |  null;
     callback: () => void;
     // callback: (data:ClientUpdateFormat) => void;
 }
@@ -47,7 +47,7 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
     const [selectedImage, setSelectedImage] = useState<ImagePickerSuccessResult | null>(null)
     const [modal, setModal] = useState(false)
     const [domains, setDomain] = useState<SelectFormat[] | []>([])
-    const [domainDataChecked, setDomainDataChecked] = useState([])
+    const [domainDataChecked, setDomainDataChecked] = useState<number[]>([])
 
     const [isClient, setisClient] = useState(false)
     
@@ -99,15 +99,22 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
     async function getDomainData () {
         const response = await fetchAllDomain()
         if (response.res) {
-            console.log(response.domains)
+            let clientDomains: number[] = []
             let data: SelectFormat[] = []
-            response.domains.map((elem) => [
+            response.domains.map((elem) => {
                 data.push({
                     label: elem.name,
                     value: elem.id
                 })
-            ])
+            })
+            
+            if(!isClient){
+                client.domains.map((elem) => {
+                    clientDomains.push(elem.id)
+                })
+            }
             setDomain(data)
+            setDomainDataChecked(clientDomains)
         }
     }
 
@@ -247,6 +254,7 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
                         <List renderHeader="Domain Text">
                             {domains.map(domain => (
                                 <CheckboxItem
+                                    checked={domainDataChecked.includes(domain.value)}
                                     key={domain.value}
                                     onChange={(event) => {
                                         const isSelected = domainDataChecked.includes(domain.value);

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
+import { Tag } from "@ant-design/react-native";
 
 interface StatusData {
     domainName: string;
@@ -9,9 +10,12 @@ const DomainTag: React.FC<StatusData> = ({domainName}) => {
 
     return (
         <>
-            <Text style={[styles.tag, styles.tag_archived]}>
+            {/* <Text style={[styles.tag, styles.tag_archived]}>
                 {domainName}
-            </Text>
+            </Text> */}
+            <Tag selected style={{marginRight: 5, marginBottom: 5}}>
+                {domainName}
+            </Tag>
         </>
     )
 }

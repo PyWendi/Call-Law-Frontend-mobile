@@ -19,7 +19,6 @@ import { AppDispatch, RootState } from "@/stores/store"
 
 
 
-const AgreeItem = Checkbox.AgreeItem
 const CheckboxItem = Checkbox.CheckboxItem
 
 interface SelectFormat {

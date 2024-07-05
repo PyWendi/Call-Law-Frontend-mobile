@@ -237,7 +237,7 @@ export interface ExperienceUpdateDataFormat {
 }
 
 export interface ExperienceCreationData {
-    experience: Experience | null;
+    experience: ExperienceUpdateDataFormat | null;
     res: boolean;
 }
 
