@@ -8,6 +8,7 @@ import { CustomJwtPayload } from "@/types/customTokenType"
 import AddExperience from "../forms/AddExperienceContent";
 import CustomButtonWithIcon from "../ButtonComponent";
 import { FontAwesome } from "@expo/vector-icons";
+import NoResultFound from "../NoResultFound";
 
 interface PropsFormat {
     id: number;
@@ -191,107 +192,12 @@ const ExperienceComponent: React.FC<PropsFormat> = ({id}) => {
                     </View>
                 )) : 
                 (
-                    <View>
-                        <Text>
-                            Hello world
-                        </Text>
+                    <View style={styles.expe_container}>
+                        <NoResultFound text="No experiences provided..." />
                     </View>
                 )}
-                
 
-                <View style={styles.expe_container}>
-                    
-                    {/* title */}
-                    <View style={styles.data_section}>
-                        {/* Icon and title */}
-                        <View style={styles.text_icon}>
-                            <Text style={[styles.data_title, styles.customFont]}>
-                                Title :
-                            </Text>
-                        </View>
-                        {/* Value */}
-                        <View>
-                        <Text style={[styles.data, styles.time]}>
-                                Simple experience title
-                            </Text>
-                        </View>
-                    </View>
-
-                    {/* description */}
-                    <View style={styles.data_section}>
-                        {/* Icon and title */}
-                        <View style={styles.text_icon}>
-                            <Text style={[styles.data_title, styles.customFont]}>
-                                Description
-                            </Text>
-                        </View>
-                        {/* Value */}
-                        <View>
-                            <Text style={[styles.data, styles.time]}>
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Distinctio vitae expedita velit nam obcaecati, reiciendis 
-                                explicabo fugiat ullam soluta voluptates ab. Aspernatur amet laudantium inventore fugiat minus tenetur recusandae tempore!
-                            </Text>
-                        </View>
-                    </View>
-
-                    {/* specialities */}
-                    <View style={styles.data_section}>
-                        {/* Icon and title */}
-                        <View style={styles.text_icon}>
-                            <FontAwesome
-                            style={styles.pr}
-                            name={"briefcase"}
-                            size={18}
-                            color={"#0D6F45"}
-                            />
-
-                            <Text style={[styles.data_title, styles.customFont]}>
-                                Specialities :
-                            </Text>
-                        </View>
-                        {/* Value */}
-                        <View>
-                            <Text style={[styles.data, styles.time]}>
-                                <Tag 
-                                selected 
-                                style={{marginHorizontal: 2, marginBottom:10}}
-                                >Droit penal</Tag>
-                                <Tag 
-                                selected 
-                                style={{marginHorizontal: 2, marginBottom:10}}>Droit civile</Tag>
-                                <Tag 
-                                selected 
-                                style={{marginHorizontal: 2, marginBottom:10}}>Droit des affaires</Tag>
-                            </Text>
-                        </View> 
-                    </View>
-
-                    {/* dates */}
-                    <View style={styles.data_section}>
-                        {/* Icon and title */}
-                        <View style={styles.text_icon}>
-                            {/* <FontAwesome
-                            style={styles.pr}
-                            name={"envelope"}
-                            size={18}
-                            color={"#0D6F45"}
-                            /> */}
-
-                            <Text style={[styles.data_title, styles.customFont]}>
-                                Dates :
-                            </Text>
-                        </View>
-                        {/* Value */}
-                        <View>
-                            <Text style={[styles.data, styles.time, styles.dates]}>
-                                    17 Aoug 2024 - 20 Nov 2024
-                            </Text>
-                        </View>
-                    </View>
-
-                </View>
-
-                <View style={{marginTop: 20, width: "95%"}}>
+                <View style={{marginTop: 20, width: "90%"}}>
                     <CustomButtonWithIcon 
                     type="outlined"
                     text="Add an experience "

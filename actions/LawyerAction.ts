@@ -162,12 +162,34 @@ export const update_availability = async (body:Availability): Promise<Availabili
         res: false
     }
 
+    console.log(body)
+
     try {
-        const response = await api.put(`lawyer/update_profile_image/`, body, {
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
+        const response = await api.put(`lawyer/update_availability/`, body)
+        console.log(response)
+        if (response.status === 200) {
+            data.availability = response.data.availability
+            data.res = true
+        }
+
+        return data
+    } catch (error) {
+        console.log(error)
+        return data
+    }
+
+}
+
+
+
+export const get_availability = async (id:number): Promise<AvailabilityData> => {
+    let data: AvailabilityData = {
+        availability: "",
+        res: false
+    }
+
+    try {
+        const response = await api.get(`lawyer/${id}/get_availability/`)
         console.log(response)
         if (response.status === 200) {
             data.availability = response.data.availability

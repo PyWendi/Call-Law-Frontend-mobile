@@ -167,8 +167,23 @@ export interface LawyerUpdate {
     last_name: string;
     phone: string;
     location: string;
-    availability?: string | null;
 }
+
+export type LawyerAvailabilityUpdate  = [
+    boolean[],
+    boolean[],
+    boolean[],
+    boolean[],
+    boolean[]
+]
+
+export interface AvailabilityHeader {
+    days: string[];
+    times: string[];
+}
+
+export type AvailabilityFormat = boolean[]
+
 
 /**
  * Notification section

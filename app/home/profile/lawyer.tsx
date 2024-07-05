@@ -1,9 +1,8 @@
 import { View, Text, ScrollView, StyleSheet, Dimensions } from "react-native";
 import React from 'react';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "expo-router";
 
-import { FontAwesome } from "@expo/vector-icons";
 import CustomButtonWithIcon from "../../../components/ButtonComponent";
 import UserProfileImage from "@/components/ProfileImage";
 import PersonalInformation from "@/components/profile/PersonalInformation";
@@ -15,8 +14,7 @@ import { RootState, AppDispatch } from "@/stores/store";
 import { decodedToken } from "@/stores/tokenManagement";
 import { CustomJwtPayload } from "@/types/customTokenType";
 
-import { Toast, Modal } from "@ant-design/react-native";
-import { ClientUpdateFormat } from "@/types/modelsType";
+import { Modal } from "@ant-design/react-native";
 import NoResultFound from "@/components/NoResultFound";
 
 import ClientUpdateModal from "@/components/forms/ClientUpdateModal";
@@ -99,7 +97,7 @@ export default function LawyerProfile() {
             </Modal>
             
             <ScrollView style={{
-                height: windowHeight-100
+                height: windowHeight-60
             }}>
 
                 <View style={[styles.header_container]}>

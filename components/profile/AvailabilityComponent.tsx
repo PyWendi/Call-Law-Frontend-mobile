@@ -1,67 +1,103 @@
 import React, {useState, useEffect} from "react";
-import { View, Text, Accordion, List } from "@ant-design/react-native";
+import { View, Text, Accordion, List, Modal, Toast } from "@ant-design/react-native";
 import { ScrollView, StyleSheet } from "react-native";
 import { update_availability } from "@/actions/LawyerAction";
+import CustomButtonWithIcon from "../ButtonComponent";
+import { decodedToken } from "@/stores/tokenManagement";
+import { CustomJwtPayload } from "@/types/customTokenType";
+import { get_availability } from "@/actions/LawyerAction";
+import UpdateAvailability from "../forms/UpdateAvailability";
+import { useRouter } from "expo-router";
+import { AvailabilityHeader, LawyerAvailabilityUpdate } from "@/types/modelsType";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/stores/store";
+import { setAvailabilities } from "@/slices/availabilitySlice";
 
-
-interface AvailabilityData {
-    days: string[];
-    times: string[];
-    data: [
-        boolean[],
-        boolean[],
-        boolean[],
-        boolean[],
-        boolean[],
-    ]
-}
 
 const AvailabilityComponent:React.FC = () => {
-
+    const router  = useRouter()
+    const dispatch = useDispatch<AppDispatch>()
+    const [modal, setModal] = useState(false)
     const [active, setActive] = useState<number[]>([])
-    const [availability, setAvailability] = useState<AvailabilityData>({
-        days: ["Monday", "Tuesday", "Wendesday", "Thursday", "Friday"],
-        times: ['7-8 AM', '8-9 AM', '9-10 AM', '10-11 AM', '11-12 AM', "1-2 PM", "2-3 PM", "3-4 PM", "4-5 PM", "5-6 PM"],
-        data: [
-            [true, true, true, true, true, false, true, true, true, false],
-            [false, false, false, false, false, false, false, false, false, false,],
-            [false, false, false, false, false, false, false, false, false, false,],
-            [false, false, false, false, false, false, false, false, false, false,],
-            [false, false, false, false, false, false, false, false, false, false,]
-        ]
-    })
-    // const time = ["7-8 AM", "8-9 AM", "9-10 AM", "10-11 AM", "11-12 AM", "1-2 PM", "2-3 PM", "3-4 PM", "4-5 PM", "5-6 PM"]
+    const availability = useSelector((state:RootState) => state.availability.header)
+    const data = useSelector((state:RootState) => state.availability.availabilities)
 
-    // let availability : {
-    //     days: ["Monday", "Tuesday", "Wendesday", "Thursday", "Friday"],
-    //     times: ['7-8 AM', '8-9 AM', '9-10 AM', '10-11 AM', '11-12 AM', "1-2 PM", "2-3 PM", "3-4 PM", "4-5 PM", "5-6 PM"],
-    //     data: [
-    //         [false, false, false, false, false, false, false, false, false, false],
-    //         [false, false, false, false, false, false, false, false, false, false,],
-    //         [false, false, false, false, false, false, false, false, false, false,],
-    //         [false, false, false, false, false, false, false, false, false, false,],
-    //         [false, false, false, false, false, false, false, false, false, false,]
-    //     ]
-    // }
+    const fetchAvailability = async () => {
+        const token: CustomJwtPayload | null = await decodedToken()
+        if(token) {
+            const response = await get_availability(token.user_id)
+            if(response.res){
+                let data = JSON.parse(response.availability)
+                dispatch(setAvailabilities(data))
+            } else {
+                console.log("An error occured when fetching the availabilities.")
+            }
+        } else {
+            router.replace("/")
+        }
+    }
 
+    
     const updateAvailability = async () => {
-        let body = JSON.stringify(availability)
+        console.log("Fetching availability...")
+        let body = JSON.stringify(data)
         const response = await update_availability({availability: body})
         if(response.res){
-            console.log(response.availability)
+            let data = JSON.parse(response.availability)
+            dispatch(setAvailabilities(data))
         } else {
             console.log("Error when updating the availabilites")
         }
     }
 
+    const triggerUpdate = async (updated: boolean) => {
+        if(updated) {
+            await Toast.success("Your weekly planning has been updated.")
+            setModal(false)
+        } else {
+            Toast.fail("An error occured when performing the operation")
+        }
+    }
+
     useEffect(() => {
-        // updateAvailability()
-        // setAvailability()
+        fetchAvailability()
     }, [])
 
     return (
         <>
             <View>
+                
+                {/* Modal for update */}
+                <View>
+                    <Modal 
+                    visible={modal}
+                    style={{
+                        width: "75%",
+                        position: "absolute",
+                        top: 250,
+                        left: "12%",
+                        borderRadius: 6,
+                        backgroundColor: "white"
+                    }}
+                    >
+
+                        <View style={{ paddingVertical: 20, paddingHorizontal: 15 }}>
+                            
+                            <UpdateAvailability 
+                            callback={(data) => triggerUpdate(data)} />
+
+                            <CustomButtonWithIcon 
+                            loading={false}
+                            text="Close modal"
+                            type="outlined_danger"
+                            buttonClicked={() => setModal(false)}
+                            />
+                        </View>
+
+
+                    </Modal>
+                </View>
+
                 <ScrollView style={{height: (350)}}>
                     <View>
                         <Accordion
@@ -85,9 +121,9 @@ const AvailabilityComponent:React.FC = () => {
                                                     {time}
                                                 </Text>
                                                 <Text style={[
-                                                    (availability.data[index][i]) ? styles.time_valid : styles.time_invalid,
+                                                    (data[index][i]) ? styles.time_valid : styles.time_invalid,
                                                     styles.time]}>
-                                                        {(availability.data[index][i]) ? "Available" : "Not available"}
+                                                        {(data[index][i]) ? "Available" : "Not available"}
                                                 </Text>
                                             </View>
                                         </List.Item>
@@ -95,41 +131,16 @@ const AvailabilityComponent:React.FC = () => {
                                 </List>
                             </Accordion.Panel>
                         ))}
-
-{/* 
-                                    <List.Item>
-                                        <View style={styles.time_container}>
-                                            <Text  style={[styles.time]}>
-                                                7-8pm 
-                                            </Text>
-                                            <Text style={[styles.time ,styles.time_invalid]}>Not Available</Text>
-                                        </View>
-                                    </List.Item> */}
-                                    
-                            
-                            {/* </Accordion.Panel> */}
-
-
-                            {/* <Accordion.Panel 
-                            header="Tuesday">
-                                this is panel content2 or other
-                            </Accordion.Panel>
-                            <Accordion.Panel 
-                            header="Wednesday">
-                                Text text text text text text text text text text text text text
-                                text text
-                            </Accordion.Panel>
-                            <Accordion.Panel 
-                            header="Thursday">
-                                Text text text text text text text text text text text text text
-                                text text
-                            </Accordion.Panel>
-                            <Accordion.Panel 
-                            header="Friday">
-                                Text text text text text text text text text text text text text
-                                text text
-                            </Accordion.Panel> */}
                         </Accordion>
+                        
+                        <View style={{width: "80%", marginTop: 10}}>
+                            <CustomButtonWithIcon 
+                            type="outlined"
+                            text="Edit your availability"
+                            buttonClicked={() => setModal(true)}
+                            />
+                        </View>
+                    
                     </View>
                 </ScrollView>
             </View>

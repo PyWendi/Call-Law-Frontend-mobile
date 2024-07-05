@@ -116,7 +116,7 @@ const AddExperience:React.FC<AddExperienceProps> = ({callback}) => {
             domain: domain,
             specialities: specialitiesDataChecked,
             date_beg: formatDate(date.toLocaleDateString()),
-            date_end: (end_date != null) ? formatDate(end_date.toLocaleDateString()) : null,
+            date_end: (end_date != null) ? formatDate(end_date) : null,
         }
 
         // console.log(data)
@@ -248,7 +248,7 @@ const AddExperience:React.FC<AddExperienceProps> = ({callback}) => {
                         <View>
                             <ScrollView style={{height: 500}} >
                                 <List renderHeader="Specialities">
-                                    {specialities.map(speciality => (
+                                    {specialities.map((speciality) => (
                                         <CheckboxItem
                                             key={speciality.value}
                                             onChange={(event) => {

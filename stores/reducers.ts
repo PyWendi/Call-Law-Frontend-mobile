@@ -10,11 +10,12 @@ import appointmentSlice from "@/slices/appointmentSlice";
 import specialitySlice from "@/slices/specialitySlice";
 import avisSlice from "@/slices/avisSlice";
 import experienceSlice from "@/slices/experienceSlice";
+import availabilitySlice from "@/slices/availabilitySlice";
 
 
 export default combineReducers({
     interactions: interactionSlice,
-
+    availability: availabilitySlice,
     lawyerProfile: lawyerProfileSlice,
     clientProfile: clientProfileSlice,
     regions: regionSlice,
