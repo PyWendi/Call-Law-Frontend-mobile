@@ -12,13 +12,14 @@ import { setAppointment } from "@/slices/appointmentSlice";
 import { AppDispatch, RootState } from "@/stores/store";
 import NoResultFound from "@/components/NoResultFound";
 import LoadingAppointment from "@/components/LoadingData";
+import { useRouter } from "expo-router";
 
 
 export default function ClientAppointments() {
+    const router = useRouter()
     const windowHeight = Dimensions.get('window').height;
-    const arr = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
     const dispatch = useDispatch<AppDispatch>()
-    const appointments = useSelector((state:RootState) => state.appointments.allAppoitment)
+    const appointments = useSelector((state:RootState) => state.appointments.appointments)
     const appointmentsCount = useSelector((state:RootState) => state.appointments.appointments).length 
  
     const [searchValue, setSearchvalue] = useState("")
@@ -44,7 +45,7 @@ export default function ClientAppointments() {
         setLoading(true)
         const response = await getAppointmentsForClient()
         if(response.res) {
-            dispatch(setAppointment(response.appointments))
+            await dispatch(setAppointment(response.appointments))
         } else {
             dispatch(setAppointment([]))
         }
@@ -53,11 +54,16 @@ export default function ClientAppointments() {
 
     const searchAppointments = async (search:string) => {
         setLoading(true)
-        const response = await searchAppointmentsForClient(search)
-        if(response.res) {
-            dispatch(setAppointment(response.appointments))
+        if(search !== ""){
+            const response = await searchAppointmentsForClient(search)
+            if(response.res) {
+                dispatch(setAppointment(response.appointments))
+            } else {
+                dispatch(setAppointment([]))
+            }
+
         } else {
-            dispatch(setAppointment([]))
+            await fetchAllAppointments()
         }
         setLoading(false) 
     }
@@ -101,7 +107,7 @@ export default function ClientAppointments() {
                                     (appointmentsCount === 0) ? (
                                         <NoResultFound text={"No appointment found..."} />
                                     ) : 
-                                        appointments.map((elem, index) =>  <AppointmentList key={elem.id} data={
+                                        appointments.map((elem, index) => (!elem.isArchived) && <AppointmentList key={elem.id} data={
                                             {elem: elem, index:index}
                                         }/>)
                                     
@@ -119,7 +125,7 @@ export default function ClientAppointments() {
                                     (appointmentsCount === 0) ? (
                                         <NoResultFound text={"No appointment found..."} />
                                     ) : 
-                                        appointments.map((elem, index) => (!elem.isConfirmed && elem.isValid) && (<AppointmentList key={index} data={
+                                        appointments.map((elem, index) => (!elem.isConfirmed && !elem.isValid) && (<AppointmentList key={index} data={
                                             {elem: elem, index:index}
                                     }/>) )
                                 }
@@ -136,7 +142,7 @@ export default function ClientAppointments() {
                                     (appointmentsCount === 0) ? (
                                         <NoResultFound text={"No appointment found..."} />
                                     ) : 
-                                        appointments.map((elem, index) => (elem.isConfirmed) && (<AppointmentList key={index} data={
+                                        appointments.map((elem, index) => (elem.isConfirmed && !elem.isArchived) && (<AppointmentList key={index} data={
                                             {elem: elem, index:index}
                                         }/>) )
                                     

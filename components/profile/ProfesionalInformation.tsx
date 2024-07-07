@@ -6,11 +6,11 @@ import ExperienceComponent from "./ExperienceComponent";
 import { Lawyer } from "@/types/modelsType";
 
 interface LawyerProps {
-    id: number,
-    availability: string | null
+    id: number;
+    isVisitor: boolean
 }
 
-const ProfesionalInformation:React.FC<LawyerProps> = ({id, availability}) => {
+const ProfesionalInformation:React.FC<LawyerProps> = ({id, isVisitor}) => {
 
     // const windowHeight = Dimensions.get('window').height;
 
@@ -20,8 +20,6 @@ const ProfesionalInformation:React.FC<LawyerProps> = ({id, availability}) => {
         // {title: "Noticies"},
     ]
 
-   
-    
 
     return (
         <>
@@ -37,12 +35,12 @@ const ProfesionalInformation:React.FC<LawyerProps> = ({id, availability}) => {
                         
                         <View style={{marginBottom: 20,
                         }}>
-                            <AvailabilityComponent />
+                            <AvailabilityComponent lawyer_id={id} isVisitor={isVisitor}/>
                         </View>
 
                         <View style={{marginBottom: 20}}>
                             <ScrollView style={{height: 350, paddingHorizontal: 5, width: "90%"}}>
-                                <ExperienceComponent id={id} />
+                                <ExperienceComponent id={id} isVisitor={isVisitor} />
                             </ScrollView>
                         </View> 
 

@@ -1,4 +1,5 @@
 import { View, StyleSheet, Image, TouchableOpacity } from "react-native"
+import { Badge } from "@ant-design/react-native"
 import { FontAwesome } from "@expo/vector-icons"
 import LogoComponent from "../LogoHeaderComponent"
 import { useRouter } from "expo-router"
@@ -11,14 +12,13 @@ import { CustomJwtPayload } from "@/types/customTokenType"
 import { useEffect, useState } from "react"
 import { fetchClientProfile } from "@/actions/clientAction"
 import { fetchSingleLawyer } from "@/actions/LawyerAction"
-import { Client, Lawyer } from "@/types/modelsType"
 
 
 
 export default function HeaderComponent () {
     const router = useRouter()
 
-    // const client = useSelector((state:RootState) => state.clientProfile.clientProfile)
+    const notifCounter = useSelector((state:RootState) => state.notifications.seen)
     const [imageSrc, setimageSrc] = useState<string | undefined | ''>('')
     const [token, setToken] = useState<CustomJwtPayload | null>(null)
 
@@ -27,13 +27,26 @@ export default function HeaderComponent () {
         router.replace("/")
     }
 
+    const redirectToNotification = () => {
+        router.navigate("home/utils/notification")
+    }
+
+    const redirectToProfile = () => {
+        if (token) {
+            if(token.isClient){
+                router.navigate("/home/profile/client/")
+            } else {
+                router.navigate("/home/profile/lawyer/")
+            }
+        } else router.replace("/")
+    }
+
     useEffect(() => {
         const fetchProfile = async () => {
             const token = await decodedToken()
             if(token){
                 setToken(token)
                 let response = null
-                console.log("Inside of client setter") 
                 if(token.isClient){
                     response = await fetchClientProfile(token.user_id)
                     if(response.res) setimageSrc(response.client?.profile_img || "")
@@ -90,10 +103,32 @@ export default function HeaderComponent () {
                             alignItems:'center',
                             borderRadius: 50
                         }}>
-                            <FontAwesome
-                                size={22}
-                                color={"#108B54"}
-                                name="bell-o" onPress={() => console.log("nofit pressed")} />
+                            {(notifCounter != 0) ? 
+                            (
+                                <Badge 
+                                text={notifCounter}
+                                size={"small"}
+                                overflowCount={15}
+                                styles={{
+                                    dotSizelarge: {
+                                        padding: 0,
+                                        margin:0
+                                    }
+                                }}
+                                >
+                                    <FontAwesome
+                                        size={22}
+                                        color={"#108B54"}
+                                        name="bell" onPress={redirectToNotification} />
+                                </Badge>
+                            )
+                            :
+                            (
+                                <FontAwesome
+                                    size={22}
+                                    color={"#108B54"}
+                                    name="bell-o" onPress={redirectToNotification} />
+                            )}
                         </View>
 
                         <View style={{ 
@@ -106,15 +141,7 @@ export default function HeaderComponent () {
                             {(imageSrc) ? 
                             (
                                 <TouchableOpacity
-                                onPress={() => {
-                                    if (token) {
-                                        if(token.isClient){
-                                            router.navigate("/home/profile/client/")
-                                        } else {
-                                            router.navigate("/home/profile/lawyer/")
-                                        }
-                                    }
-                                }}
+                                onPress={redirectToProfile}
                                 >
                                     <Image
                                     source={{
@@ -133,7 +160,7 @@ export default function HeaderComponent () {
                                 <FontAwesome 
                                     size={22}
                                     color={"#108B54"}
-                                    name="user-circle-o" onPress={() => console.log("Profile pressed")} />
+                                    name="user-circle-o" onPress={redirectToProfile} />
                             )}
                         </View>
 

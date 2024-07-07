@@ -124,7 +124,8 @@ export const createAppointment = async (body: AppointmentCreateFormat): Promise<
 
     try {
         const response = await api.post(`appointment/`, body)
-        if(response.status === 200) {
+        console.log(response) 
+        if(response.status === 201) {
             data.appointments = response.data
             data.res = true
         }

@@ -31,26 +31,31 @@ const appointmentSlice = createSlice({
     reducers: {
         setAppointment: (state, action: PayloadAction<Appointment[] | []>) => {
             
-            deleteAppointment()
+            state.allAppoitment = []
+            state.appointments = []
+            state.archivedAppointments = []
+
             let s:Appointment[] = []
             let a:Appointment[] = []
             state.allAppoitment = action.payload
             if(action.payload.length != 0){
                 action.payload.map((elem) => {
+                    console.log(elem)
                     if(elem.isArchived){
                         a.push(elem)
                         state.archivedAppointments.push(elem)
                     } 
                     else {
                         s.push(elem)
-                        console.log("Inside of the slice appointment setter ***********")
                         state.appointments.push(elem)
                     }
                 })
                 state.archivedAppointments = a
                 state.appointments = s
             } else {
-                deleteAppointment()
+                state.allAppoitment = []
+                state.appointments = []
+                state.archivedAppointments = []
             }
         },
 
@@ -76,7 +81,6 @@ const appointmentSlice = createSlice({
         },
         archiveAppointmentData: (state, action:PayloadAction<{index: number}>) => {
             state.allAppoitment[action.payload.index].isArchived = true
-            setAppointment(state.allAppoitment)
         },
 
         deleteAppointment: (state) => {

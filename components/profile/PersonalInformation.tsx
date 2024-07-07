@@ -20,11 +20,12 @@ interface PersonalInformationProps {
         id: number
     };
     trigger: () => void; 
+    isVisitor: boolean
 
 }
 
 
-const PersonalInformation:React.FC<PersonalInformationProps> = ({data, trigger}) => {
+const PersonalInformation:React.FC<PersonalInformationProps> = ({data, trigger, isVisitor}) => {
 
     const router = useRouter()
     // let isClient = false
@@ -182,27 +183,19 @@ const PersonalInformation:React.FC<PersonalInformationProps> = ({data, trigger})
                         />
                     </View>
 
-                    {/* {
-                        ()
-                    } */}
-                    <View style={{marginTop: 10}}>
-                        <View style={{paddingBottom: 10}}>
-                            <CustomButtonWithIcon 
-                            type="outlined"
-                            icon="edit"
-                            loading={false}
-                            text="Edit your information"
-                            buttonClicked={() => trigger()}
-                            />
+                    {(!isVisitor) && (
+                        <View style={{marginTop: 10}}>
+                            <View style={{paddingBottom: 10}}>
+                                <CustomButtonWithIcon 
+                                type="outlined"
+                                icon="edit"
+                                loading={false}
+                                text="Edit your information"
+                                buttonClicked={() => trigger()}
+                                />
+                            </View>
                         </View>
-
-                        {/* <CustomButtonWithIcon 
-                        type="primary"
-                        // icon="home"
-                        buttonClicked={redirectToHome}
-                        text="Go back home"
-                        /> */}
-                    </View>
+                    )}
 
                 </View>
             </View>    

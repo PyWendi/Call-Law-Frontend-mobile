@@ -208,9 +208,9 @@ export interface NotificationAppointment {
 
 export interface Notification {
     id: 8;
-    receiver:NotificationReciever; // short client object
+    receiver: number; // short client object
     appointment: NotificationAppointment
-    author: number;
+    author: NotificationReciever;
     type: string;
     seen: boolean;
     created_at: string

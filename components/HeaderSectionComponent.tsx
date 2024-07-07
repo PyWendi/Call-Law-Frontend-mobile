@@ -25,7 +25,7 @@ const style = StyleSheet.create({
         backgroundColor: "white",
         borderRadius: 5,
         padding: 5,
-        marginBottom: 15,
+        // marginBottom: 15,
     },
     header_style: {
         textAlign: "center",

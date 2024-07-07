@@ -10,12 +10,14 @@ import { checkAuthentitcation } from "@/actions/clientAction";
 
 import { useDispatch, UseDispatch } from "react-redux";
 import { getAppointmentsForClient } from "@/actions/appointmentAction";
+import { getAllNotification } from "@/actions/notificationAction";
 import { setAppointment } from "@/slices/appointmentSlice";
 
 import { fetchClientProfile } from "@/actions/clientAction";
 import { fetchSingleLawyer } from "@/actions/LawyerAction";
 import { setClientProfile } from "@/slices/clientProfileSlice";
 import { setLawyerProfile } from "@/slices/lawyerProfileSlice";
+import { setNotifications, setCounter } from "@/slices/notificationSlice";
 
 export default function ClientHome() {
     const router = useRouter()
@@ -38,6 +40,19 @@ export default function ClientHome() {
             }
         } else {
             router.navigate("/")
+        }
+    }
+
+    const fetchAllNotification = async () => {
+        const response = await getAllNotification()
+        if(response.res) {
+            dispatch(setNotifications(response.notifications))
+            let counter = 0
+            response.notifications.map((notif) => (!notif.seen) && counter++)
+            dispatch(setCounter(counter))
+            console.log(response.notifications, "All notification")
+        } else {
+            console.log("Error when fecthing notification")
         }
     }
 
@@ -78,9 +93,10 @@ export default function ClientHome() {
     }
 
     useEffect(() => {
+        checkAuth()
+        fetchAllNotification()
         setProfile()
         fetchAllAppointments()
-        checkAuth()
     }, [])
     
 

@@ -6,26 +6,29 @@ import { useEffect, useState } from "react";
 import { CustomJwtPayload } from "@/types/customTokenType";
 import { decodedToken } from "@/stores/tokenManagement";
 import { useRouter } from "expo-router";
-import { parseISO, format, formatDistanceToNow } from "date-fns";
+import { format, parseISO, formatDistanceToNow } from "date-fns";
+import { useSelector } from "react-redux";
+import { RootState } from "@/stores/store";
 import TagComponent from "./TagComponent";
 import ProfileImage from "./ListProfileImage";
 
 
 interface DataProps {
     data: {
-        elem:Appointment,
-        index: number
+        // elem:Appointment,
+        index: number,
+        archive: boolean
     },
 }
 
 
 const AppointmentList:React.FC<DataProps> = ({data}) => {
-    
+    const elem = (data.archive) ? useSelector((state:RootState) => state.appointments.archivedAppointments[data.index]) : useSelector((state:RootState) => state.appointments.appointments[data.index]) 
     const router = useRouter()
     const [userIsClient, setUserIsClient] = useState(false)
 
-    const formatedDate = format(parseISO(data.elem.date), 'dd/MM/yyyy HH:mm')
-    const formatCreatedDate = formatDistanceToNow(parseISO(data.elem.created_at))
+    const formatedDate = elem.date ? format(parseISO(elem.date), 'dd/MM/yyyy HH:mm') : "-- / -- / --"
+    const formatCreatedDate = formatDistanceToNow(parseISO(elem.created_at))
     
     async function defineUserIsClient (): Promise<boolean> {
         const tokenData:CustomJwtPayload | null = await decodedToken()
@@ -43,14 +46,14 @@ const AppointmentList:React.FC<DataProps> = ({data}) => {
 
     const handleTouchableOpacityPress = () => {
         router.navigate({
-            pathname: "/home/appointments/[index]",
+            pathname: (data.archive) ? "/home/appointments/[index]?archive=true" : "/home/appointments/[index]?archive=false",
             params: {index: data.index}
         })
     }
     
-    useEffect(() => {
+    useEffect(() => { 
         setuser()
-    }, [data.elem])
+    }, [elem])
 
     return (
         <>
@@ -59,16 +62,16 @@ const AppointmentList:React.FC<DataProps> = ({data}) => {
                     <View style={styles.divider}>
                         <View style={{width: "30%", marginRight: 10}}>
                             {(userIsClient)?
-                                <ProfileImage profile_link={data.elem.lawyer.profile_img} />
+                                <ProfileImage profile_link={elem.lawyer.profile_img} />
                                 :   
-                                <ProfileImage profile_link={data.elem.client.profile_img} />
+                                <ProfileImage profile_link={elem.client.profile_img} />
                             }
                         </View>
                         <View style={[styles.info_part]}>
                             {/* Title part */}
                             <View>
                                 <Text style={styles.title}>
-                                    {data.elem.title}
+                                    {elem.title}
                                 </Text>
                             </View>
 
@@ -83,11 +86,11 @@ const AppointmentList:React.FC<DataProps> = ({data}) => {
                                 <Text style={{fontWeight:"500", color: "#6d6d6d"}}>
                                     {(userIsClient) ? 
                                     (
-                                        data.elem.lawyer.first_name
+                                        elem.lawyer.first_name
                                     )
                                     :
                                     (
-                                        data.elem.client.first_name
+                                        elem.client.first_name
                                     )
                                 }
                                 </Text>
@@ -102,7 +105,7 @@ const AppointmentList:React.FC<DataProps> = ({data}) => {
                                     style={{paddingRight: 10}}
                                     />
                                 <Text style={{fontWeight:"500", color: "#0D6F45"}}>
-                                    {data.elem.speciality.name}
+                                    {elem.speciality.name}
                                 </Text>
                             </View>
 
@@ -116,11 +119,7 @@ const AppointmentList:React.FC<DataProps> = ({data}) => {
                                     style={{paddingRight: 10}}
                                     />
                                 <Text style={{fontWeight:"500", color: "#0D6F45"}}>
-                                    {(data.elem.date != null) ? 
-                                    formatedDate
-                                    :
-                                    ("-- / -- / --")
-                                    }
+                                    {formatedDate}
                                 </Text>
                             </View>
 
@@ -134,9 +133,9 @@ const AppointmentList:React.FC<DataProps> = ({data}) => {
                                 }}>
                                     <View style={{width:"50%"}}>
                                     <TagComponent 
-                                    isArchived={data.elem.isArchived}
-                                    isConfirmed={data.elem.isConfirmed}
-                                    isValid={data.elem.isValid}
+                                    isArchived={elem.isArchived}
+                                    isConfirmed={elem.isConfirmed}
+                                    isValid={elem.isValid}
                                     />
                                     </View>
                                     <Text style={{color: "#33863a", width: "50%", textAlign: "right"}}>{formatCreatedDate} ago</Text>

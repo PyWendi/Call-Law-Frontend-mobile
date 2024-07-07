@@ -25,6 +25,7 @@ export default function ClientProfile() {
     const windowHeight = Dimensions.get('window').height;
     const dispatch = useDispatch<AppDispatch>()
     const profile = useSelector((state:RootState) => state.clientProfile.clientProfile)
+    console.log(profile)
     const [modal, setModal] = useState(false)
 
     const redirectToHome = async () => {
@@ -69,6 +70,7 @@ export default function ClientProfile() {
                 position: "absolute",
                 // top: "100%",
                 top: 150,
+                // top: 0,
                 left: "12%",
                 borderRadius: 6,
                 backgroundColor: "white"

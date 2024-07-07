@@ -107,14 +107,16 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
                     value: elem.id
                 })
             })
-            
-            if(!isClient){
-                client.domains.map((elem) => {
-                    clientDomains.push(elem.id)
-                })
+            const token:CustomJwtPayload | null = await decodedToken()
+            if(token){
+                if(!token.isClient){
+                    client.domains.map((elem) => {
+                        clientDomains.push(elem.id)
+                    })
+                    setDomain(data)
+                    setDomainDataChecked(clientDomains)
+                }
             }
-            setDomain(data)
-            setDomainDataChecked(clientDomains)
         }
     }
 
@@ -218,7 +220,9 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
         // ToastAndroid.show("Hello world", ToastAndroid.SHORT)
         clientSetter()
         getRegionData()
-        getDomainData()
+        if(!isClient){
+            getDomainData()
+        }
     },[]) 
 
     return (
@@ -228,7 +232,8 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
                 style={{
                     width: "75%",
                     position: "absolute",
-                    top: 220,
+                    // top: 220,
+                    top: 120,
                     left: "12%",
                     backgroundColor: "white",
                     // transform: [
@@ -251,7 +256,7 @@ const ClientUpdateModal: React.FC<PropsFormat> = ({client, callback}) => {
                     </View>
 
                     <View>
-                        <List renderHeader="Domain Text">
+                        <List renderHeader="Domain List">
                             {domains.map(domain => (
                                 <CheckboxItem
                                     checked={domainDataChecked.includes(domain.value)}

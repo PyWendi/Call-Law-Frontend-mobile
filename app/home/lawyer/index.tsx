@@ -8,14 +8,16 @@ import { useEffect, useState } from "react";
 import { decodedToken } from "@/stores/tokenManagement";
 import { checkAuthentitcation } from "@/actions/clientAction";
 
-import { useDispatch, UseDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { getAppointmentsForClient } from "@/actions/appointmentAction";
 import { setAppointment } from "@/slices/appointmentSlice";
+import { setNotifications, setCounter } from "@/slices/notificationSlice";
 
 import { fetchClientProfile } from "@/actions/clientAction";
 import { fetchSingleLawyer } from "@/actions/LawyerAction";
 import { setClientProfile } from "@/slices/clientProfileSlice";
 import { setLawyerProfile } from "@/slices/lawyerProfileSlice";
+import { getAllNotification } from "@/actions/notificationAction";
 
 export default function LawyerHome() {
     const router = useRouter()
@@ -44,12 +46,25 @@ export default function LawyerHome() {
     const fetchAllAppointments = async () => {
         setLoading(true)
         const response = await getAppointmentsForClient()
-        if(response.res) {
+        if(response.res) { 
             dispatch(setAppointment(response.appointments))
         } else {
             console.log(response)
         }
         setLoading(false)
+    }
+
+    const fetchAllNotification = async () => {
+        const response = await getAllNotification()
+        if(response.res) {
+            dispatch(setNotifications(response.notifications))
+            let counter = 0
+            response.notifications.map((notif) => (!notif.seen) && counter++)
+            dispatch(setCounter(counter))
+            console.log(response.notifications, "All notification")
+        } else {
+            console.log("Error when fecthing notification")
+        }
     }
 
     const setProfile = async () => {
@@ -77,9 +92,10 @@ export default function LawyerHome() {
     }
 
     useEffect(() => {
+        checkAuth()
+        fetchAllNotification()
         setProfile()
         fetchAllAppointments()
-        checkAuth()
     }, [])
     
 

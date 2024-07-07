@@ -15,7 +15,7 @@ import LoadingAppointment from "@/components/LoadingData";
 
 export default function ClientSearch() {
     const windowHeight = Dimensions.get('window').height;
-    const arr = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
+    // const arr = [2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2]
     const dispatch = useDispatch<AppDispatch>()
     const lawyers = useSelector((state:RootState) => state.lawyers.lawyers)
  
@@ -91,7 +91,7 @@ export default function ClientSearch() {
                                 ) : 
                                     lawyers.map((elem, index) =>  
                                     <LawyerList key={elem.id} data={
-                                        {lawyers: elem, index:index}
+                                        {lawyers: elem}
                                     }/>
                                 )
                             }

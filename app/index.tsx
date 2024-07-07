@@ -7,7 +7,7 @@ import CustomButtonWithIcon from "@/components/ButtonComponent"
 import { CustomJwtPayload } from "@/types/customTokenType"
 import { decodedToken } from "@/stores/tokenManagement"
 import {Svg, Path } from "react-native-svg"
-
+import { StyleSheet } from "react-native"
 
 export default function HomeScreen() {
 
@@ -59,7 +59,7 @@ export default function HomeScreen() {
 
             <SafeAreaView style={{
                 flex:1,
-                justifyContent: "center"
+                justifyContent: "center",
             }}>
                 <View>
                     {/* Welcome text */}
@@ -73,8 +73,12 @@ export default function HomeScreen() {
 
                         <View>
                             <Text style={styles.welcome_text}>
+                            {/* <Text style={customStyle.welcome_text}> */}
                                 "Acting or looking for justice."
                             </Text>
+                            {/* <Text style={{marginTop:200, backgroundColor:"grey"}}>
+                                Helo wordsad
+                            </Text> */}
                         </View>
                     </View>
 
@@ -118,3 +122,11 @@ export default function HomeScreen() {
         </>
     )
 }
+
+const customStyle = StyleSheet.create({
+    welcome_text:{
+		// fontSize: 20,
+		// color: "#108B54",
+		// marginBottom:50
+	},
+})

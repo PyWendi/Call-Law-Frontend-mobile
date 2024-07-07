@@ -13,8 +13,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/stores/store";
 import { setAvailabilities } from "@/slices/availabilitySlice";
 
+interface VisitorProps {
+    lawyer_id: number
+    isVisitor: boolean;
+}
 
-const AvailabilityComponent:React.FC = () => {
+const AvailabilityComponent:React.FC<VisitorProps> = ({isVisitor, lawyer_id}) => {
     const router  = useRouter()
     const dispatch = useDispatch<AppDispatch>()
     const [modal, setModal] = useState(false)
@@ -23,45 +27,28 @@ const AvailabilityComponent:React.FC = () => {
     const data = useSelector((state:RootState) => state.availability.availabilities)
 
     const fetchAvailability = async () => {
-        const token: CustomJwtPayload | null = await decodedToken()
-        if(token) {
-            const response = await get_availability(token.user_id)
-            if(response.res){
-                let data = JSON.parse(response.availability)
-                dispatch(setAvailabilities(data))
-            } else {
-                console.log("An error occured when fetching the availabilities.")
-            }
-        } else {
-            router.replace("/")
-        }
-    }
-
-    
-    const updateAvailability = async () => {
-        console.log("Fetching availability...")
-        let body = JSON.stringify(data)
-        const response = await update_availability({availability: body})
+        const response = await get_availability(lawyer_id)
         if(response.res){
             let data = JSON.parse(response.availability)
             dispatch(setAvailabilities(data))
         } else {
-            console.log("Error when updating the availabilites")
+            console.log("An error occured when fetching the availabilities.")
         }
     }
 
     const triggerUpdate = async (updated: boolean) => {
         if(updated) {
             await Toast.success("Your weekly planning has been updated.")
-            setModal(false)
+            setModal(false) 
         } else {
             Toast.fail("An error occured when performing the operation")
         }
     }
 
     useEffect(() => {
+        // console.log("FETCHING AVAILABILITY")
         fetchAvailability()
-    }, [])
+    }, [lawyer_id])
 
     return (
         <>
@@ -98,7 +85,8 @@ const AvailabilityComponent:React.FC = () => {
                     </Modal>
                 </View>
 
-                <ScrollView style={{height: (350)}}>
+                <ScrollView 
+                style={{height: (350)}}>
                     <View>
                         <Accordion
                             activeSections={active}
@@ -133,13 +121,15 @@ const AvailabilityComponent:React.FC = () => {
                         ))}
                         </Accordion>
                         
-                        <View style={{width: "80%", marginTop: 10}}>
-                            <CustomButtonWithIcon 
-                            type="outlined"
-                            text="Edit your availability"
-                            buttonClicked={() => setModal(true)}
-                            />
-                        </View>
+                        {(!isVisitor) && (
+                            <View style={{width: "80%", marginTop: 10}}>
+                                <CustomButtonWithIcon 
+                                type="outlined"
+                                text="Edit your availability"
+                                buttonClicked={() => setModal(true)}
+                                />
+                            </View>
+                        )}
                     
                     </View>
                 </ScrollView>

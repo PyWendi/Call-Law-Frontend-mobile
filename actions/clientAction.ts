@@ -29,7 +29,6 @@ export const registerClient = async (data: ClientSignInFormat): Promise<ClientPr
 export const checkAuthentitcation = async (): Promise<boolean> => {
     try {
         const response = await api.get("client/check_auth/")
-        console.log(response, "Check for authentication")
         if(response.status === 200) {
             return true
         } else if(response.status === 401){

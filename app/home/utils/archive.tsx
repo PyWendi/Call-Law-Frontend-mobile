@@ -21,8 +21,8 @@ export default function ArchiveAppointments() {
     const arr = [2,2,2,2,2,2,2,2,2,2,2,22,2,2]
     const windowHeight = Dimensions.get('window').height;
     const dispatch = useDispatch<AppDispatch>()
-    const appointments = useSelector((state:RootState) => state.appointments.allAppoitment)
-    const appointmentsCount = useSelector((state:RootState) => state.appointments.archivedAppointments).length
+    const appointments = useSelector((state:RootState) => state.appointments.archivedAppointments)
+    const appointmentsCount = useSelector((state:RootState) => state.appointments.archivedAppointments)
     console.log(appointmentsCount)
  
     const [searchValue, setSearchvalue] = useState("")
@@ -118,11 +118,11 @@ export default function ArchiveAppointments() {
                             {(loading) ? (
                                     <LoadingAppointment />
                                 ) : 
-                                (appointmentsCount === 0) ? (
+                                (appointmentsCount.length === 0) ? (
                                     <NoResultFound text={"No appointment found..."} />
                                 ) : 
                                     appointments.map((elem, index) => (elem.isArchived) && (<AppointmentList key={index} data={
-                                        {elem: elem, index:index}
+                                        {index:index, archive: true}
                                 }/>) )
                             }
 

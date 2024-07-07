@@ -1,12 +1,13 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 import { AppointmentLawyerValidationFormat } from "@/types/modelsType";
+import { getAppointmentsForClient } from "@/actions/appointmentAction";
 import { useState } from "react";
 import DatePicker from "react-native-date-picker";
 import CustomButtonWithIcon from "../ButtonComponent";
 import CustomInputSimple from "../CustomWithoutLineComponent";
 import { validateAppointment } from "@/actions/appointmentAction";
-import { validateAppointmentData } from "@/slices/appointmentSlice";
+import { setAppointment, validateAppointmentData } from "@/slices/appointmentSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "@/stores/store";
 import { Toast } from "@ant-design/react-native";
@@ -36,16 +37,14 @@ const ValidationForm: React.FC<DataTransfer> = ({dataTransfer, index}) => {
 
         const response = await validateAppointment(appointmentData.id, data)
         if(response.res){
-            dispatch(validateAppointmentData({
-                index: index,
-                data: {
-                    date: date.toISOString(),
-                    message: message
-                }
-            }))
-            Toast.success("This appoinitment is successfully canceled !", 2)
-            setLoading(false)
-            dataTransfer()
+            const fetch = await getAppointmentsForClient()
+            if(fetch.res){
+                dispatch(setAppointment(fetch.appointments))
+                console.log(appointmentData)
+                Toast.success("This appoinitment is successfully canceled !", 2)
+                setLoading(false)
+                dataTransfer()
+            }
         } else {
             Toast.fail("An error ocured while performing the action. Please verify your network.")
         }
@@ -75,7 +74,6 @@ const ValidationForm: React.FC<DataTransfer> = ({dataTransfer, index}) => {
                         onConfirm={(date) => {
                             setShow(false)
                             setDate(date)
-                            console.log(date)
                         }}
                         onCancel={() => {
                             setShow(false)
@@ -102,7 +100,7 @@ const ValidationForm: React.FC<DataTransfer> = ({dataTransfer, index}) => {
                     icon="check"
                     loading={loading}
                     text="Validate the appointment"  
-                    buttonClicked={handleValidate}               
+                    buttonClicked={()=> handleValidate()}               
                     />
                 </View>
 

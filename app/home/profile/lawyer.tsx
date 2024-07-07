@@ -1,12 +1,14 @@
 import { View, Text, ScrollView, StyleSheet, Dimensions } from "react-native";
+import { Modal } from "@ant-design/react-native";
 import React from 'react';
-import { useState } from "react";
-import { useRouter } from "expo-router";
+import { useState, useEffect } from "react";
+import { useRouter, useLocalSearchParams } from "expo-router";
 
 import CustomButtonWithIcon from "../../../components/ButtonComponent";
 import UserProfileImage from "@/components/ProfileImage";
 import PersonalInformation from "@/components/profile/PersonalInformation";
 import ProfesionalInformation from "@/components/profile/ProfesionalInformation";
+import AddAppointment from "@/components/forms/AddAppointment";
 
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/stores/store";
@@ -14,7 +16,6 @@ import { RootState, AppDispatch } from "@/stores/store";
 import { decodedToken } from "@/stores/tokenManagement";
 import { CustomJwtPayload } from "@/types/customTokenType";
 
-import { Modal } from "@ant-design/react-native";
 import NoResultFound from "@/components/NoResultFound";
 
 import ClientUpdateModal from "@/components/forms/ClientUpdateModal";
@@ -23,10 +24,13 @@ import { setLawyerProfile } from "@/slices/lawyerProfileSlice";
 
 export default function LawyerProfile() {
     const router = useRouter()
+    const { lawyer_id, isClient } = useLocalSearchParams()
     const windowHeight = Dimensions.get('window').height;
     const dispatch = useDispatch<AppDispatch>()
     const profile = useSelector((state:RootState) => state.lawyerProfile.lawyerProfile)
     const [modal, setModal] = useState(false)
+    const [appointmentModal, setAppointmentModal] = useState(false)
+    const [isVisitor, setIsVisitor] = useState(false)
 
     const redirectToHome = async () => {
         const decodedData: CustomJwtPayload | null = await decodedToken()
@@ -46,26 +50,78 @@ export default function LawyerProfile() {
     }
 
     const fetchCient = async () => {
-        if(profile != null){
-            const response  = await fetchSingleLawyer(profile.id)
-            if(response.res){
-                if(response.lawyer != null) {
-                    console.log(response.lawyer)
-                    dispatch(setLawyerProfile(response.lawyer))
+        const token: CustomJwtPayload | null  = await decodedToken()
+
+        if(token){
+            if(lawyer_id != null) {
+                setIsVisitor((parseInt(lawyer_id) === token.user_id) ? false : true)
+                const response = await fetchSingleLawyer(parseInt(lawyer_id))
+                if(response.res){
+                    if(response.lawyer){
+                        dispatch(setLawyerProfile(response.lawyer))
+                        
+                        // router.navigate("/home/appointments/0")
+                    }
                 }
             }
-        }
+            else if(profile != null){
+                setIsVisitor(false)
+                const response  = await fetchSingleLawyer(profile.id)
+                if(response.res){
+                    if(response.lawyer != null) {
+                        console.log(response.lawyer)
+                        dispatch(setLawyerProfile(response.lawyer))
+                    }
+                }
+            }
+        } else router.replace("/")
     }
 
     const handleUpdate = async () => {
         setModal(false)
-        fetchCient()
+        await fetchCient()
     }
 
+    const handleAppointment = () => {
+        setAppointmentModal(false)
+    }
+
+    useEffect(() => {
+        fetchCient()
+    }, [])
 
     return (
         <View>
 
+
+            {/* Add appointment modal */}
+            <Modal 
+            visible={appointmentModal}
+            style={{
+                width: "75%",
+                position: "absolute",
+                // top: "100%",
+                top: 240,
+                left: "12%",
+                borderRadius: 6,
+                backgroundColor: "white"
+            }}
+            >
+
+                <View style={{ paddingVertical: 20, paddingHorizontal: 20 }}>
+                    
+                    <AddAppointment lawyer_id={profile?.id} callback={handleAppointment} />
+
+                    <CustomButtonWithIcon 
+                    loading={false}
+                    text="Close modal"
+                    type="outlined_danger"
+                    buttonClicked={() => setAppointmentModal(false)}
+                    />
+                </View>
+
+
+            </Modal>
 
             {/* Update form inside a modal box */}
             <Modal 
@@ -130,6 +186,17 @@ export default function LawyerProfile() {
                                     {profile?.last_name}
                                 </Text>
                             </View>
+
+                            {(isClient === "true") && (
+                                <View style={styles.person}>
+                                    <CustomButtonWithIcon
+                                    type="primary"
+                                    icon="calendar-plus-o"
+                                    text="Take anappointment"
+                                    buttonClicked={() => setAppointmentModal(true)}
+                                    />
+                                </View>
+                            )}
                         </View>
 
                     </View>
@@ -151,6 +218,7 @@ export default function LawyerProfile() {
                                 region: profile.region.designation
                             }}
                             trigger={handleTrigger}
+                            isVisitor={isVisitor}
                             />
                         </View>
 
@@ -171,7 +239,7 @@ export default function LawyerProfile() {
                         <View style={[styles.infomration_container, styles.elevate]}>
                             <ProfesionalInformation 
                             id={profile.id}
-                            availability={""}
+                            isVisitor={isVisitor}
                             />
                         </View>
 

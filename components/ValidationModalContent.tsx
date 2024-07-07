@@ -5,7 +5,8 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/stores/store";
 import { archiveAppointment } from "@/actions/appointmentAction";
-import { archiveAppointmentData } from "@/slices/appointmentSlice";
+import { archiveAppointmentData, setAppointment } from "@/slices/appointmentSlice";
+import { getAppointmentsForClient } from "@/actions/appointmentAction";
 import { Toast } from "@ant-design/react-native";
 
 interface validationProps {
@@ -25,9 +26,13 @@ const ValidationModalContent: React.FC<validationProps> = ({conclusion, index}) 
     const handleArchive = async () => {
         setLoading(true)
 
-        const response = await archiveAppointment(appointmentData.id)
+        let response = await archiveAppointment(appointmentData.id)
         if(response){
-            dispatch(archiveAppointmentData({index:index}))
+            const fetch = await getAppointmentsForClient()
+            if (fetch.res){
+                await dispatch(setAppointment(fetch.appointments))
+            }
+            // await dispatch(archiveAppointmentData({index:index}))
             setLoading(false)
             Toast.success("This appoinitment is successfully archived !", 2)
             conclusion()

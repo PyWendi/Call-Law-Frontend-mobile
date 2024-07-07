@@ -1,5 +1,4 @@
 import { View, Text, StyleSheet, ScrollView } from "react-native"
-import { useLocalSearchParams } from "expo-router"
 import { useSelector, useDispatch } from "react-redux"
 import { AppDispatch, RootState } from "@/stores/store"
 import { styles } from "@/styles/mainstyle"
@@ -9,7 +8,7 @@ import { parseISO, format, formatDistanceToNow } from "date-fns"
 import TagComponent from "@/components/TagComponent"
 import ProfileImage from "@/components/ListProfileImage"
 import { useState, useEffect } from "react"
-import { useRouter } from "expo-router"
+import { useRouter, useLocalSearchParams } from "expo-router"
 import { CustomJwtPayload } from "@/types/customTokenType"
 import { decodedToken } from "@/stores/tokenManagement"
 import CustomButtonWithIcon from "@/components/ButtonComponent"
@@ -31,12 +30,11 @@ export default function AppointmentDetails() {
     
     
     
-    let { index } = useLocalSearchParams();
+    let { index, archive } = useLocalSearchParams();
     const safeIndex = typeof index === 'string'? index : '0';
     const parsedIndex = parseInt(safeIndex);
-    
-    const detailData = useSelector((state:RootState) => state.appointments.allAppoitment[parsedIndex])
-    const formatedDate = format(parseISO(detailData.date), 'dd/MM/yyyy HH:mm')
+    const detailData = (archive==="false") ? useSelector((state:RootState) => state.appointments.appointments[parsedIndex]) : useSelector((state:RootState) => state.appointments.archivedAppointments[parsedIndex])
+    const formatedDate = detailData.date ? format(parseISO(detailData.date), 'dd/MM/yyyy HH:mm') : "-- / -- / --"
     const formatCreatedDate = formatDistanceToNow(parseISO(detailData.created_at))
 
     async function defineUserIsClient (): Promise<boolean> {
@@ -171,7 +169,7 @@ export default function AppointmentDetails() {
             
 
             {/* Header: Title and description and case speciality */}
-            <View style={[style.elem_container]}>
+            <View style={[style.elem_container, {marginTop:15}]}>
                 <View style={style.mb}>
                     <Text style={[style.text_section_highlight, styles.color_green]}>Title :</Text> 
                     <Text style={style.text_section_content}>{detailData.title}</Text>
@@ -248,7 +246,7 @@ export default function AppointmentDetails() {
             }
 
             {/* Person client|lawyer and message (ifExist)*/}
-            <View style={[style.elem_container]}>
+            <View style={[style.elem_container, {marginTop:15}]}>
 
                 <View style={style.image_and_name}>
                     {/* Profile */}
@@ -283,7 +281,7 @@ export default function AppointmentDetails() {
                         </View>
                         <View style={[style.ml]}>
                             <Text style={[style.text_section_highlight, styles.color_green]}>Message :</Text> 
-                                <Text style={style.text_section_content}>
+                                <Text style={[style.text_section_content, {width:"30%"}]}>
                                     {(detailData.message != null) ? detailData.message : "Not message set..."}
                                 </Text>
                         </View>
@@ -295,7 +293,7 @@ export default function AppointmentDetails() {
             {/* Action button */}
             <HeaderSectionComponent title="Actions"/>
                 
-            <View style={style.elem_container}>
+            <View style={[style.elem_container, {marginTop:15}]}>
                 {/* Cancel button */}
                 <View>
                     {(userIsClient) ? 
@@ -336,17 +334,18 @@ export default function AppointmentDetails() {
                             text="Appointment has been archived"/>
                         )
                         :
-                        (!detailData.isConfirmed)? 
+                        // (!detailData.isConfirmed)? 
+                        (!detailData.isValid)? 
                         (
                             <CustomButtonWithIcon 
-                            type="primary"
-                            icon="calendar-o"
-                            loading={loading}
-                            text="Save the date"
+                            type="outlined_danger"
+                            disabled={true}
+                            loading={false}
+                            text="Has been canceled"
                             buttonClicked={() => setModal(true)}
                             />
                         ): 
-                        (detailData.isValid)? (
+                        (detailData.isConfirmed)? (
                             <View>
                                 <CustomButtonWithIcon 
                                 type="outlined_danger"
@@ -366,13 +365,13 @@ export default function AppointmentDetails() {
                             </View>
                             
                         ) :
-                        
+                            
                         (
                             <CustomButtonWithIcon 
-                            type="outlined_danger"
-                            disabled={true}
-                            loading={false}
-                            text="Has been canceled"
+                            type="primary"
+                            icon="calendar-o"
+                            loading={loading}
+                            text="Save the date"
                             buttonClicked={() => setModal(true)}
                             />
                         )

@@ -18,8 +18,18 @@ const notificationSlice = createSlice({
         addNotification: (state, action: PayloadAction<Notification>) => {
             state.notifications.unshift(action.payload)
         },
-        markNotificationAsSeen: (state, action: PayloadAction<{index:number}>) => {
-            state.notifications[action.payload.index].seen = true
+        markNotificationAsSeen: (state, action: PayloadAction<number>) => {
+            if(!state.notifications[action.payload].seen) {
+                state.notifications[action.payload].seen = true
+                console.log("decremented")
+            }
+        },
+
+        markAllNotificationAsSeen: (state) => {
+            for (let i=0; i < state.notifications.length; i++){
+                state.notifications[i].seen = true
+            }
+            state.seen = 0
         },
 
         setCounter: (state, action: PayloadAction<number>) => {
@@ -28,6 +38,9 @@ const notificationSlice = createSlice({
         },
         incrementCounter: (state) => {
             state.seen++
+        },
+        decrementCounter: (state) => {
+            state.seen--
         }
     }
 })
@@ -37,8 +50,10 @@ export const {
     setNotifications, 
     addNotification ,
     markNotificationAsSeen,
+    markAllNotificationAsSeen,
     setCounter,
-    incrementCounter
+    incrementCounter,
+    decrementCounter
 } = notificationSlice.actions
 
 export default notificationSlice.reducer

@@ -18,7 +18,7 @@ export default function RootLayout() {
       <Stack.Screen name="client" options={{ headerShown: true }} />
       <Stack.Screen name="profile" options={{ headerShown: true }} />
       <Stack.Screen name="utils" options={{ headerShown: true }} />
-      <Stack.Screen name="appointments" options={{ headerShown: true }} />
+      <Stack.Screen name="appointments/[index]" options={{ headerShown: true }} />
     </Stack>
   );
 }

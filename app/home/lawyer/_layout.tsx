@@ -29,6 +29,7 @@ export default function LawyerLayout() {
     <Tabs screenOptions={{
 		tabBarActiveTintColor: "#dac518",
 		tabBarInactiveTintColor: "#6d6d6d" ,
+		
 		tabBarLabel: "",
 		headerShown: false
       }}>

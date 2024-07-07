@@ -5,12 +5,14 @@ import { MassLawyerFormat } from "@/types/modelsType";
 import { useRouter } from "expo-router";
 import ProfileImage from "./ListProfileImage";
 import DomainTag from "./DomainTag";
+import { CustomJwtPayload } from "@/types/customTokenType";
+import { decodedToken } from "@/stores/tokenManagement";
+import { CurvedTransition } from "react-native-reanimated";
 
 
 interface DataProps {
     data: {
         lawyers:MassLawyerFormat,
-        index: number,
     },
 }
 
@@ -19,11 +21,12 @@ const LawyerList:React.FC<DataProps> = ({data}) => {
     
     const router = useRouter()
 
-    const handleTouchableOpacityPress = () => {
-        router.navigate({
-            pathname: "/home/profile/[id]",
-            params: {id: data.index} 
-        })
+    const handleTouchableOpacityPress = async () => {
+        const token: CustomJwtPayload | null = await decodedToken()
+        if(token) {
+            const isClient = token.isClient
+            router.navigate(`home/profile/lawyer?lawyer_id=${data.lawyers.id}&isClient=${isClient}`)
+        } else router.replace("/")
     }
 
     return (

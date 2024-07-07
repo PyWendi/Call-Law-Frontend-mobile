@@ -55,7 +55,6 @@ export const fetchSingleLawyer = async (id:number):Promise<LawyerProfileData> =>
     try {
         const response = await api.get(`lawyer/${id}/`)
         if (response.status === 200) {
-            console.log(response, "Lawyer profile has been FETCHED !!")
             data.lawyer = response.data
             data.res = true
         }

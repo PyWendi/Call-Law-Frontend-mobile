@@ -12,9 +12,10 @@ import NoResultFound from "../NoResultFound";
 
 interface PropsFormat {
     id: number;
+    isVisitor: boolean;
 }
 
-const ExperienceComponent: React.FC<PropsFormat> = ({id}) => {
+const ExperienceComponent: React.FC<PropsFormat> = ({id, isVisitor}) => {
 
     const [experiences, setExperiences] = useState<Experience[] | []>([])
     const [loading, setLoading] = useState(false)
@@ -24,10 +25,10 @@ const ExperienceComponent: React.FC<PropsFormat> = ({id}) => {
         // console.log(id) 
         const response = await getExperiences(id)
         if(response.res){
-            console.log("SUCCESS WHEN FETCHING EXPERIENCES")
-            console.log(response.experiences)
+            // console.log("SUCCESS WHEN FETCHING EXPERIENCES")
+            // console.log(response.experiences)
             setExperiences(response.experiences)
-        } else console.log("FAILED TO LOAD EXPERIENCES")
+        } else Toast.fail("FAILED TO LOAD EXPERIENCES", 1) 
     }
 
     const handleAddExperience = async (data: boolean) => {
@@ -43,7 +44,7 @@ const ExperienceComponent: React.FC<PropsFormat> = ({id}) => {
 
     useEffect(() => {
         fetchExperience()
-    }, [])
+    }, [id])
 
     return (
         <>
@@ -197,15 +198,17 @@ const ExperienceComponent: React.FC<PropsFormat> = ({id}) => {
                     </View>
                 )}
 
-                <View style={{marginTop: 20, width: "90%"}}>
-                    <CustomButtonWithIcon 
-                    type="outlined"
-                    text="Add an experience "
-                    icon="plus"
-                    loading={loading}
-                    buttonClicked={() => setAddModal(true)}
-                    />
-                </View>
+                {(!isVisitor) && (
+                    <View style={{marginTop: 20, width: "90%"}}>
+                        <CustomButtonWithIcon 
+                        type="outlined"
+                        text="Add an experience "
+                        icon="plus"
+                        loading={loading}
+                        buttonClicked={() => setAddModal(true)}
+                        />
+                    </View>
+                )}
 
             </View>
         </>

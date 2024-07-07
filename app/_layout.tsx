@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from '@/stores/store';
 import { Provider as AntProvider } from '@ant-design/react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -38,7 +39,7 @@ export default function RootLayout() {
 
       <PersistGate loading={null} persistor={persistor}>
         <AntProvider>
-
+        <SafeAreaProvider>
           <Stack screenOptions={{
             headerShown: false
           }}>
@@ -47,6 +48,7 @@ export default function RootLayout() {
             <Stack.Screen name="home" options={{ headerShown: false }} /> 
             <Stack.Screen name="+not-found" options={{ headerShown: false }}/>
           </Stack>
+        </SafeAreaProvider>
           
         </AntProvider>
 
