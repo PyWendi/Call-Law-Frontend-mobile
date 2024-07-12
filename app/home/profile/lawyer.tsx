@@ -130,7 +130,7 @@ export default function LawyerProfile() {
                 width: "75%",
                 position: "absolute",
                 // top: "100%",
-                top: 140,
+                top: 100,
                 left: "12%",
                 borderRadius: 6,
                 backgroundColor: "white"

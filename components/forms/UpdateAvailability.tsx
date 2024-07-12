@@ -70,7 +70,7 @@ const UpdateAvailability:React.FC<AvailabilityData> = ({callback}) => {
                     style={{
                         width: "75%",
                         position: "absolute",
-                        top: 140,
+                        top: 150,
                         left: "12%",
                         borderRadius: 6,
                         backgroundColor: "white",
