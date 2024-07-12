@@ -22,9 +22,9 @@ export default function HeaderComponent () {
     const [imageSrc, setimageSrc] = useState<string | undefined | ''>('')
     const [token, setToken] = useState<CustomJwtPayload | null>(null)
 
-    const handleLogout = async () => {
-        await logout()
-        router.replace("/")
+    const handleSettings = async () => {
+        // await logout()
+        router.replace("/home/utils/setting")
     }
 
     const redirectToNotification = () => {
@@ -177,7 +177,7 @@ export default function HeaderComponent () {
                             <FontAwesome 
                                 size={25}
                                 color={"#108B54"}
-                                name="sign-out" onPress={handleLogout} />
+                                name="bars" onPress={handleSettings} />
                                 {/* // name="bars" onPress={handleLogout} /> */}
                         </View>
                         
